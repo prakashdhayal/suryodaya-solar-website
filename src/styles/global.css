@@ -176,10 +176,17 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
 .btn-ghost-light { border-color: rgb(255 255 255 / 0.75); color: #fff; background: rgb(255 255 255 / 0.06); }
 .btn-ghost-light:hover { background: rgb(255 255 255 / 0.16); color: #fff; }
 
+.btn svg { flex-shrink: 0; }
+
 .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+/* small phones: buttons take the full width and a long label wraps instead of pushing the page sideways */
 @media (max-width: 479.98px) {
   .actions .btn { flex: 1 1 100%; }
+  .btn { white-space: normal; text-align: center; }
 }
+
+/* a column of a grid may narrow below its content's widest line */
+.split > *, .contact-grid > *, .content-grid > *, .cta-inner > * { min-width: 0; }
 
 .text-link {
   display: inline-flex; align-items: center; gap: 6px;
@@ -212,7 +219,15 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
   color: var(--ink);
   flex-shrink: 0;
 }
-.brand .logo { border-radius: 12px; }
+/* the SSP logo was drawn on black: on the white header it sits on a dark tile */
+.logo { display: inline-flex; flex-shrink: 0; }
+.logo img { display: block; max-width: none; }
+.logo-tile {
+  padding: 5px 9px;
+  border-radius: 10px;
+  background: radial-gradient(circle at 70% 30%, #10261a, #050807 70%);
+  box-shadow: 0 1px 2px rgb(5 8 7 / 0.3);
+}
 .wordmark { display: flex; flex-direction: column; line-height: 1.05; }
 .wordmark strong { font-family: var(--font-head); font-size: 1.2rem; font-weight: 700; color: var(--green-900); }
 .wordmark span { font-size: 0.78rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green-700); }
@@ -305,7 +320,8 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
   .top-quote { display: inline-flex; }
 }
 @media (min-width: 1100px) {
-  .nav.wide { display: flex; gap: 22px; margin-left: 28px; }
+  .nav.wide { display: flex; gap: 18px; margin-left: 24px; }
+  .nav.wide a { white-space: nowrap; }
   .menu { display: none; }
 }
 @media (min-width: 1280px) {

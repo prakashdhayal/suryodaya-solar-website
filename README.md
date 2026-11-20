@@ -62,7 +62,7 @@ that. To remove a photo, delete its file and push.
 | Pages | `src/pages/` (home, solar-solutions + one per solution, products, projects, about, contact, privacy-policy, 404) |
 | Look | `src/styles/global.css` (green and white tokens at the top; Poppins + Inter served from the site) |
 | Site photos (hero, sections) | `src/assets/site/` - free Unsplash photos, replace with the client's when they have good ones |
-| Logo mark | `components/Logo.astro` and `public/favicon.svg` (a stand-in until the client's logo arrives) |
+| Logo | `src/assets/brand/`: the client's original (on black) and the transparent cut-out made from it; `components/Logo.astro` (a dark tile on light backgrounds); icons and `og-card.jpg` in `public/` |
 
 ## Placeholders
 
@@ -71,8 +71,6 @@ data. `npm run check:placeholders` (also run by every build) lists them. Still o
 
 - the domain (`SITE_URL` - GitHub's address until then), email, office hours, PIN code, the exact map pin, the company's own story (About)
 - the privacy policy's "last updated" date, once the client approves it
-- calls currently go to the WhatsApp number (63761 54794) - change `CONTACT.phone` when they give a calling number
-- the logo
 
 ## Enquiries
 

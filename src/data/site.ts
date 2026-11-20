@@ -48,16 +48,13 @@ export const MAP = {
   pin: TBD as string | null,
 };
 
-const whatsappDigits = '916376154794';
+const whatsappDigits = '918078681486';
 
-/**
- * Phone and WhatsApp. 63761 54794 is used for both for now (the number we were given); calls go to it too until the
- * client gives a separate calling number.
- */
+/** Phone and WhatsApp: the client's mobile, 80786 81486, for both. */
 export const CONTACT = {
-  phone: '+91 63761 54794',
-  phoneHref: 'tel:+916376154794',
-  whatsappNumber: '+91 63761 54794',
+  phone: '+91 80786 81486',
+  phoneHref: 'tel:+918078681486',
+  whatsappNumber: '+91 80786 81486',
   whatsappDigits,
   email: TBD as string | null,
   hours: TBD as string | null,
