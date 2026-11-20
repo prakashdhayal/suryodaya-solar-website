@@ -1,0 +1,26 @@
+---
+/** The green strip that asks for the enquiry, with the three buttons. */
+import ActionButtons from './ActionButtons.astro';
+
+interface Props {
+  heading?: string;
+  text?: string;
+  quoteHref?: string;
+}
+
+const {
+  heading = 'Planning solar for your home or business?',
+  text = 'Tell us what you need - we will suggest a system and send you a quote.',
+  quoteHref,
+} = Astro.props;
+---
+
+<section class="cta-band">
+  <div class="wrap cta-inner reveal">
+    <div>
+      <h2>{heading}</h2>
+      <p>{text}</p>
+    </div>
+    <ActionButtons onDark quoteHref={quoteHref} />
+  </div>
+</section>

@@ -1,0 +1,12 @@
+---
+/** Brand names as tiles (names, not logos). */
+interface Props {
+  brands: readonly string[];
+  label: string;
+}
+const { brands, label } = Astro.props;
+---
+
+<ul class="brand-grid" role="list" aria-label={label}>
+  {brands.map((b) => <li class="brand-tile reveal">{b}</li>)}
+</ul>

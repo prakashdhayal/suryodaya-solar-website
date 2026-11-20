@@ -1,0 +1,29 @@
+---
+/** The three ways to reach the company: a quote (the enquiry form), WhatsApp, a call. */
+import Icon from './Icon.astro';
+import { CONTACT, link, QUOTE_HREF, whatsappLink } from '../data/site';
+
+interface Props {
+  /** Where "Get a Free Quote" goes - the form on this page when it has one. */
+  quoteHref?: string;
+  /** On a dark or photo background. */
+  onDark?: boolean;
+  /** The first WhatsApp message. */
+  whatsappText?: string;
+  class?: string;
+}
+
+const { quoteHref: quote = QUOTE_HREF, onDark = false, whatsappText, class: className } = Astro.props;
+---
+
+<div class:list={['actions', className]}>
+  <a class="btn btn-sun" href={link(quote)} data-track="quote_click">
+    <Icon name="quote" size={20} />Get a Free Quote
+  </a>
+  <a class="btn btn-wa" href={whatsappLink(whatsappText)} target="_blank" rel="noopener" data-track="whatsapp_click">
+    <Icon name="whatsapp" size={20} />WhatsApp<span class="sr-only"> (opens WhatsApp)</span>
+  </a>
+  <a class:list={['btn', onDark ? 'btn-ghost-light' : 'btn-ghost']} href={CONTACT.phoneHref} data-track="call_click">
+    <Icon name="phone" size={20} />Call {CONTACT.phone}
+  </a>
+</div>

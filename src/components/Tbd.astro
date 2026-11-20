@@ -1,0 +1,9 @@
+---
+/** A fact the client has not given us yet - visible on purpose, so it is never mistaken for the real thing. */
+interface Props {
+  what: string;
+}
+const { what } = Astro.props;
+---
+
+<span class="tbd">[{what} - to be provided]</span>

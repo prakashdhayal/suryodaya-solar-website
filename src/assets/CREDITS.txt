@@ -1,0 +1,17 @@
+Stand-in photos (site/ and samples/) are from Unsplash, free to use under the Unsplash License
+(https://unsplash.com/license) - no attribution required. Replace them with the client's own photos when available.
+Each is https://images.unsplash.com/<id> below.
+
+site/hero-solar-panels-blue-sky.jpg        photo-1509391366360-2e959784a276
+site/technician-wiring-solar-panel.jpg     photo-1559302504-64aae6ca6b6d
+site/rooftop-panel-installation.jpg        photo-1624397640148-949b1732bb0a
+site/commercial-rooftop-solar.jpg          photo-1613665813446-82a78c468a1d
+site/solar-panel-rows.jpg                  photo-1545208942-e1c9c916524b
+site/ground-mounted-solar-panels.jpg       photo-1592833159155-c62df1b65634
+site/solar-plant-at-dusk.jpg               photo-1611365892117-00ac5ef43c90
+samples/sample-01-panels-on-grass.jpg      photo-1497440001374-f26997328c1b
+samples/sample-02-panel-rows-sky.jpg       photo-1508514177221-188b1cf16e9d
+samples/sample-03-panel-array.jpg          photo-1521618755572-156ae0cdd74d
+samples/sample-04-panels-near-trees.jpg    photo-1566093097221-ac2335b09e70
+samples/sample-05-rooftop-fitting.jpg      photo-1624397640148-949b1732bb0a
+samples/sample-06-factory-roof.jpg         photo-1613665813446-82a78c468a1d

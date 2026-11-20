@@ -1,0 +1,105 @@
+---
+/**
+ * The enquiry form. A static site keeps nothing, so the form writes the enquiry as a WhatsApp message to the company
+ * and opens the chat - the visitor presses Send there. Without JavaScript it still opens the chat (empty).
+ */
+import Icon from './Icon.astro';
+import { CONTACT } from '../data/site';
+import { REQUIREMENTS, SYSTEM_TYPES, type Requirement, type SystemType } from '../data/solutions';
+
+interface Props {
+  system?: SystemType;
+  requirement?: Requirement;
+}
+const { system, requirement } = Astro.props;
+---
+
+<form class="enquiry" action={`https://wa.me/${CONTACT.whatsappDigits}`} method="get" target="_blank" novalidate data-enquiry>
+  <div class="field">
+    <label for="enq-name">Your name <span aria-hidden="true">*</span></label>
+    <input id="enq-name" name="name" type="text" autocomplete="name" required maxlength="80" />
+  </div>
+  <div class="field">
+    <label for="enq-mobile">Mobile number <span aria-hidden="true">*</span></label>
+    <input id="enq-mobile" name="mobile" type="tel" inputmode="tel" autocomplete="tel" required maxlength="16" placeholder="10-digit mobile" />
+  </div>
+  <div class="field span-2">
+    <label for="enq-location">Location <span aria-hidden="true">*</span></label>
+    <input id="enq-location" name="location" type="text" autocomplete="address-level2" required maxlength="100" placeholder="Area / village, city" />
+  </div>
+  <fieldset class="field">
+    <legend>Requirement <span aria-hidden="true">*</span></legend>
+    <div class="choices">
+      {
+        REQUIREMENTS.map((r) => (
+          <label class="choice">
+            <input type="radio" name="requirement" value={r} required checked={r === requirement} />
+            <span>{r}</span>
+          </label>
+        ))
+      }
+    </div>
+  </fieldset>
+  <div class="field">
+    <label for="enq-system">Solar system type</label>
+    <select id="enq-system" name="system">
+      {SYSTEM_TYPES.map((s) => <option value={s} selected={s === system}>{s}</option>)}
+      <option value="Not sure" selected={!system}>Not sure yet</option>
+    </select>
+  </div>
+  <div class="field span-2">
+    <label for="enq-message">Message</label>
+    <textarea id="enq-message" name="message" rows="3" maxlength="600" placeholder="Monthly bill, roof type, power cuts, anything else"></textarea>
+  </div>
+  <div class="span-2 form-foot">
+    <button class="btn btn-wa btn-lg" type="submit">
+      <Icon name="whatsapp" size={22} />Send enquiry on WhatsApp
+    </button>
+    <p class="form-note">
+      Your enquiry opens in WhatsApp, ready to send to {CONTACT.whatsappNumber}. Nothing is stored on this website.
+    </p>
+    <p class="form-status" role="status" aria-live="polite"></p>
+  </div>
+</form>
+
+<script>
+  /** 10-digit Indian mobile from whatever was typed (+91, 0, spaces), or null. */
+  function mobileOf(raw: string) {
+    let digits = raw.replace(/\D/g, '');
+    if (digits.length === 12 && digits.startsWith('91')) digits = digits.slice(2);
+    if (digits.length === 11 && digits.startsWith('0')) digits = digits.slice(1);
+    return /^[6-9]\d{9}$/.test(digits) ? digits : null;
+  }
+
+  document.querySelectorAll<HTMLFormElement>('form[data-enquiry]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const mobile = form.elements.namedItem('mobile') as HTMLInputElement;
+    mobile.addEventListener('input', () => mobile.setCustomValidity(''));
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const value = (k: string) => String(data.get(k) ?? '').trim();
+      const number = mobileOf(value('mobile'));
+      mobile.setCustomValidity(value('mobile') && !number ? 'Please enter a 10-digit mobile number.' : '');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      const lines = [
+        'Solar enquiry from the website',
+        `Name: ${value('name')}`,
+        `Mobile: ${number}`,
+        `Location: ${value('location')}`,
+        `Requirement: ${value('requirement')}`,
+        `System type: ${value('system')}`,
+      ];
+      if (value('message')) lines.push(`Message: ${value('message')}`);
+      const url = `${form.action}?text=${encodeURIComponent(lines.join('\n'))}`;
+      if (!window.open(url, '_blank', 'noopener')) window.location.href = url;
+      status.textContent = 'WhatsApp has opened with your enquiry - press Send there to reach us.';
+      const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+      gtag?.('event', 'generate_lead', { requirement: value('requirement'), system_type: value('system'), page_path: location.pathname });
+    });
+  });
+</script>

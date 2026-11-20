@@ -1,0 +1,116 @@
+---
+import { Picture } from 'astro:assets';
+import ActionButtons from '../../components/ActionButtons.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import Faq from '../../components/Faq.astro';
+import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro';
+import { link, SITE_URL } from '../../data/site';
+import { SOLUTIONS, type Solution } from '../../data/solutions';
+
+export function getStaticPaths() {
+  return SOLUTIONS.map((solution) => ({ params: { slug: solution.slug }, props: { solution } }));
+}
+
+const { solution: s } = Astro.props as { solution: Solution };
+const url = `${SITE_URL}/solar-solutions/${s.slug}/`;
+const others = SOLUTIONS.filter((o) => o.slug !== s.slug);
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    '@id': `${url}#service`,
+    name: s.name,
+    serviceType: s.name,
+    description: s.description,
+    url,
+    provider: { '@id': `${SITE_URL}/#business` },
+    areaServed: { '@type': 'City', name: 'Ajmer' },
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: s.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  },
+];
+---
+
+<Base
+  title={s.name}
+  fullTitle={s.title}
+  description={s.description}
+  crumbs={[
+    { name: 'Solar Solutions', href: '/solar-solutions/' },
+    { name: s.name, href: `/solar-solutions/${s.slug}/` },
+  ]}
+  jsonLd={jsonLd}
+  quoteHref="#enquiry"
+>
+  <section class="page-head with-image">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">{s.eyebrow}</span>
+        <h1>{s.h1}</h1>
+        <p class="lead">{s.lead}</p>
+        <ActionButtons quoteHref="#enquiry" whatsappText={`Hello Suryodaya Solar Power, I would like to know about a ${s.name.toLowerCase()}.`} />
+      </div>
+      <div class="split-media">
+        <Picture src={s.image.src} alt={s.image.alt} formats={['avif', 'webp']} widths={[480, 800, 1100]} sizes="(min-width: 900px) 46vw, 92vw" quality={70} loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap content-grid">
+      <div class="prose">
+        {
+          s.sections.map((section) => (
+            <section class="reveal">
+              <h2>{section.heading}</h2>
+              {section.paragraphs?.map((p) => <p>{p}</p>)}
+              {section.list && (
+                <ul class="check-list">
+                  {section.list.map((item) => <li>{item}</li>)}
+                </ul>
+              )}
+            </section>
+          ))
+        }
+        <section class="reveal">
+          <h2>Common questions</h2>
+          <Faq faqs={s.faqs} />
+        </section>
+      </div>
+      <aside class="card aside-card">
+        <h2>Who it suits</h2>
+        <ul class="check-list">
+          {s.suits.map((x) => <li>{x}</li>)}
+        </ul>
+        <ActionButtons quoteHref="#enquiry" />
+      </aside>
+    </div>
+  </section>
+
+  <section class="section alt tight" aria-labelledby="others-title">
+    <div class="wrap">
+      <h2 id="others-title">Other solar solutions</h2>
+      <ul class="service-grid" role="list">
+        {
+          others.map((o) => (
+            <li class="service-card reveal">
+              <span class="chip-icon"><Icon name={o.icon} size={26} /></span>
+              <h3><a class="stretch" href={link(`/solar-solutions/${o.slug}/`)}>{o.name}</a></h3>
+              <p>{o.summary}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <ContactSection
+    heading={s.quoteHeading}
+    system={s.preset.system}
+    requirement={s.preset.requirement}
+  />
+</Base>

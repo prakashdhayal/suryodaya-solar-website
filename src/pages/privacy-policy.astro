@@ -1,0 +1,60 @@
+---
+/** What the site does with a visitor's information - the analytics paragraph appears only while analytics is on. */
+import Base from '../layouts/Base.astro';
+import Tbd from '../components/Tbd.astro';
+import { ADDRESS, ANALYTICS_ID, COMPANY, CONTACT } from '../data/site';
+---
+
+<Base
+  title="Privacy Policy"
+  description={`How ${COMPANY.name}'s website handles your information: enquiries go to us on WhatsApp, nothing is stored on the site.`}
+  crumbs={[{ name: 'Privacy policy', href: '/privacy-policy/' }]}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <h1>Privacy Policy</h1>
+      <p class="lead">How this website handles your information.</p>
+    </div>
+  </section>
+  <section class="section tight">
+    <div class="wrap prose">
+      <h2>Enquiries</h2>
+      <p>
+        The enquiry form does not send anything to this website. When you press "Send enquiry on WhatsApp", your details
+        (name, mobile number, location, requirement, system type and message) are written into a WhatsApp message to
+        {' '}{CONTACT.whatsappNumber}, and WhatsApp opens. Nothing is sent until you press Send in WhatsApp.
+      </p>
+      <p>
+        We use what you send only to answer your enquiry and to prepare a quote. We do not sell or share it. You can ask
+        us to delete your messages at any time by calling or messaging {CONTACT.phone}.
+      </p>
+      <h2>Calls and WhatsApp</h2>
+      <p>
+        Call and WhatsApp buttons open your phone's dialler or WhatsApp. WhatsApp is run by WhatsApp LLC (Meta) under its
+        own privacy policy.
+      </p>
+      <h2>Map</h2>
+      <p>
+        The map of our office is provided by Google Maps. When it loads, Google may set cookies and receive your IP address,
+        under Google's privacy policy.
+      </p>
+      {
+        ANALYTICS_ID && (
+          <>
+            <h2>Visitor statistics</h2>
+            <p>
+              We use Google Analytics to count visits and which pages are used, and to count taps on the call, WhatsApp and
+              enquiry buttons. Google Analytics uses cookies and receives your IP address, under Google's privacy policy.
+            </p>
+          </>
+        )
+      }
+      <h2>Contact</h2>
+      <p>
+        {COMPANY.name}, {ADDRESS.oneLine}. Phone and WhatsApp {CONTACT.phone}.
+        {CONTACT.email ? <> Email <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>.</> : <> <Tbd what="Email" /></>}
+      </p>
+      <p><small>Last updated: <Tbd what="Date the client approves this policy" /></small></p>
+    </div>
+  </section>
+</Base>

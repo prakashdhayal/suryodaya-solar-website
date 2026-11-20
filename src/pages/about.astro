@@ -1,0 +1,65 @@
+---
+import { Picture } from 'astro:assets';
+import ActionButtons from '../components/ActionButtons.astro';
+import CtaBand from '../components/CtaBand.astro';
+import SectionHead from '../components/SectionHead.astro';
+import ServiceCards from '../components/ServiceCards.astro';
+import Tbd from '../components/Tbd.astro';
+import Base from '../layouts/Base.astro';
+import { ADDRESS, COMPANY } from '../data/site';
+import rooftop from '../assets/site/rooftop-panel-installation.jpg';
+---
+
+<Base
+  title="About Us"
+  description="Suryodaya Solar Power is a solar installation company in Lohagal, Ajmer: on-grid, off-grid and hybrid systems for homes and businesses, panels and inverters."
+  pageType="AboutPage"
+  crumbs={[{ name: 'About Us', href: '/about/' }]}
+>
+  <section class="page-head with-image">
+    <div class="wrap split">
+      <div>
+        <span class="eyebrow">About us</span>
+        <h1>About Suryodaya Solar Power</h1>
+        <p class="lead">
+          A solar installation company in Ajmer, Rajasthan. We install on-grid, off-grid and hybrid solar systems for homes
+          and businesses, and supply the panels and inverters that go into them.
+        </p>
+        <ActionButtons />
+      </div>
+      <div class="split-media">
+        <Picture src={rooftop} alt="A solar panel being fitted on a house roof" formats={['avif', 'webp']} widths={[480, 800, 1100]} sizes="(min-width: 900px) 46vw, 92vw" quality={70} loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap prose">
+      <h2 class="reveal">Who we are</h2>
+      <p class="reveal">{COMPANY.story ?? <Tbd what="The company's story, in the client's words" />}</p>
+      <p class="reveal">
+        Our office is at {ADDRESS.oneLine}. We work with homeowners, shops, offices, schools, hospitals and factories,
+        and choose each system around how the place uses power.
+      </p>
+      <h2 class="reveal">What we do</h2>
+      <ul class="check-list reveal">
+        <li>On-grid solar system installation</li>
+        <li>Off-grid solar system installation</li>
+        <li>Hybrid solar system installation</li>
+        <li>Domestic solar plant installation</li>
+        <li>Commercial solar plant installation</li>
+        <li>DCR and non-DCR solar panels: Tata Power Solar, Waaree, Adani Solar, Luminous, Vikram Solar</li>
+        <li>Single-phase and three-phase inverters: Polycab, Luminous, Deye, Selec, SolaX, Solis, GoodWe</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap">
+      <SectionHead eyebrow="Our services" heading="Solar solutions" center />
+      <ServiceCards />
+    </div>
+  </section>
+
+  <CtaBand />
+</Base>

@@ -1,0 +1,21 @@
+---
+/** Google's map of the office (no key needed), loaded when it scrolls near, and a link that opens it in Google Maps. */
+import Icon from './Icon.astro';
+import { ADDRESS, COMPANY, MAP } from '../data/site';
+
+const target = MAP.pin ?? MAP.query;
+const embed = `https://maps.google.com/maps?q=${encodeURIComponent(target)}&z=${MAP.pin ? 17 : 15}&output=embed`;
+const open = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(target)}`;
+---
+
+<div class="map">
+  <iframe
+    src={embed}
+    title={`Map: ${COMPANY.name}, ${ADDRESS.oneLine}`}
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade"
+    allowfullscreen></iframe>
+  <a class="map-open" href={open} target="_blank" rel="noopener" data-track="map_click">
+    <Icon name="pin" size={18} />Open in Google Maps<span class="sr-only"> (opens a new tab)</span>
+  </a>
+</div>

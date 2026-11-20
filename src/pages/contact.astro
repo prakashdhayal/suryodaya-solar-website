@@ -1,0 +1,20 @@
+---
+import ContactSection from '../components/ContactSection.astro';
+import Base from '../layouts/Base.astro';
+import { CONTACT } from '../data/site';
+---
+
+<Base
+  title="Contact Us"
+  fullTitle="Contact Us - Solar Enquiry, Ajmer | Suryodaya Solar Power"
+  description={`Call or WhatsApp ${CONTACT.phone}, or send an enquiry for a free solar quote. Suryodaya Solar Power, Krishna Vihar Colony, Lohagal, Ajmer.`}
+  pageType="ContactPage"
+  crumbs={[{ name: 'Contact', href: '/contact/' }]}
+  quoteHref="#enquiry"
+>
+  <ContactSection
+    level={1}
+    heading="Contact us for a free solar quote"
+    lead="Fill in the form and it opens in WhatsApp, ready to send - or call us directly."
+  />
+</Base>

@@ -1,0 +1,24 @@
+---
+/** How a solar enquiry goes, in four general steps. */
+import Icon from './Icon.astro';
+
+const STEPS = [
+  { icon: 'chat', title: 'Tell us your need', text: 'Call, WhatsApp or send the form - with your bills and roof photos if you have them.' },
+  { icon: 'ruler', title: 'System design', text: 'The system type, size, panels and inverter are chosen to suit your use and your roof.' },
+  { icon: 'quote', title: 'Quotation', text: 'You get a quote for the system that fits, to look over at your own pace.' },
+  { icon: 'tools', title: 'Installation', text: 'The panels, inverter, structure and wiring are installed and the system is started.' },
+];
+---
+
+<ol class="steps" role="list">
+  {
+    STEPS.map((s, i) => (
+      <li class="step reveal">
+        <span class="step-no">{i + 1}</span>
+        <span class="chip-icon"><Icon name={s.icon} size={24} /></span>
+        <h3>{s.title}</h3>
+        <p>{s.text}</p>
+      </li>
+    ))
+  }
+</ol>

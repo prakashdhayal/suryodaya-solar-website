@@ -1,0 +1,75 @@
+---
+import ActionButtons from '../components/ActionButtons.astro';
+import BrandGrid from '../components/BrandGrid.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Icon from '../components/Icon.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Base from '../layouts/Base.astro';
+import { INVERTER_BRANDS, INVERTER_KINDS, PANEL_BRANDS, PANEL_KINDS } from '../data/brands';
+import { link } from '../data/site';
+---
+
+<Base
+  title="Products & Brands"
+  fullTitle="Solar Panels & Inverters in Ajmer | Suryodaya Solar Power"
+  description="DCR and non-DCR solar panels from Tata Power Solar, Waaree, Adani Solar, Luminous and Vikram Solar; single- and three-phase inverters from 7 brands, in Ajmer."
+  crumbs={[{ name: 'Products & Brands', href: '/products/' }]}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Products & brands</span>
+      <h1>Solar Panels and Inverters in Ajmer</h1>
+      <p class="lead">We supply DCR and non-DCR solar panels and single-phase and three-phase inverters from well-known brands - chosen to suit each installation.</p>
+      <ActionButtons whatsappText="Hello Suryodaya Solar Power, I would like to know about solar panels and inverters." />
+    </div>
+  </section>
+
+  <section class="section" id="solar-panels" aria-labelledby="panels-title">
+    <div class="wrap">
+      <SectionHead id="panels-title" eyebrow="Solar panels" heading="DCR and non-DCR solar panels" />
+      <div class="kinds">
+        {
+          PANEL_KINDS.map((k) => (
+            <div class="kind reveal">
+              <h3 class="h4">{k.name}</h3>
+              <p>{k.text}</p>
+            </div>
+          ))
+        }
+      </div>
+      <h3 class="brands-title reveal"><span class="chip-icon"><Icon name="panel" /></span>Solar panel brands</h3>
+      <BrandGrid brands={PANEL_BRANDS} label="Solar panel brands" />
+    </div>
+  </section>
+
+  <section class="section alt" id="inverters" aria-labelledby="inverters-title">
+    <div class="wrap">
+      <SectionHead id="inverters-title" eyebrow="Inverters" heading="Single-phase and three-phase inverters" />
+      <div class="kinds">
+        {
+          INVERTER_KINDS.map((k) => (
+            <div class="kind reveal">
+              <h3 class="h4">{k.name}</h3>
+              <p>{k.text}</p>
+            </div>
+          ))
+        }
+      </div>
+      <h3 class="brands-title reveal"><span class="chip-icon"><Icon name="inverter" /></span>Inverter brands</h3>
+      <BrandGrid brands={INVERTER_BRANDS} label="Inverter brands" />
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap prose reveal">
+      <h2>Which panel and inverter do I need?</h2>
+      <p>
+        It depends on the system - on-grid, off-grid or hybrid - your electricity connection and, for some government
+        schemes, whether DCR panels are required. Share your requirement and we will suggest a combination that fits.
+      </p>
+      <a class="text-link" href={link('/solar-solutions/')}>Compare solar systems <Icon name="arrow" size={18} /></a>
+    </div>
+  </section>
+
+  <CtaBand heading="Ask for a panel and inverter quote" text="Tell us your system type and location - we will suggest brands and send a quote." />
+</Base>

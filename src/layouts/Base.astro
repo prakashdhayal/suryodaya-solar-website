@@ -1,0 +1,290 @@
+---
+/**
+ * Every page: title and description, canonical address and share card, structured data (the business on every page,
+ * the website on the home page, the page with its breadcrumb trail on the rest), the header and its phone menu (a
+ * <details>, so it works without JavaScript), the footer, the phone's Call / WhatsApp / Quote bar and the WhatsApp
+ * button. Google Analytics and the Search Console tag appear only when their settings are filled in (see README).
+ */
+import '@fontsource-variable/inter';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+import Logo from '../components/Logo.astro';
+import { SOLUTIONS } from '../data/solutions';
+import {
+  ADDRESS,
+  ANALYTICS_ID,
+  COMPANY,
+  CONTACT,
+  MAP,
+  link,
+  NAV,
+  PREVIEW,
+  QUOTE_HREF,
+  SEARCH_CONSOLE_TOKEN,
+  SITE_URL,
+  whatsappLink,
+} from '../data/site';
+
+export interface Crumb {
+  name: string;
+  href: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  /** The whole <title> when "Title | Company" is not the best one (the home page, the keyword pages). */
+  fullTitle?: string;
+  /** schema.org type of the page (AboutPage, ContactPage, CollectionPage...). */
+  pageType?: string;
+  /** The trail above this page (Home is added first). */
+  crumbs?: Crumb[];
+  noindex?: boolean;
+  /** More structured data for this page (a service, its questions). */
+  jsonLd?: Record<string, unknown>[];
+  /** Where "Get a Free Quote" goes from this page - its own form when it has one. */
+  quoteHref?: string;
+}
+
+const { title, description, pageType = 'WebPage', crumbs, jsonLd = [] } = Astro.props;
+// a preview on GitHub's address is kept out of search results as a whole
+const noindex = Astro.props.noindex || PREVIEW;
+const quoteHref = link(Astro.props.quoteHref ?? QUOTE_HREF);
+const path = Astro.url.pathname;
+const isHome = path === link('/');
+const canonical = new URL(path, SITE_URL).href;
+const fullTitle = Astro.props.fullTitle ?? `${title} | ${COMPANY.name}`;
+const isCurrent = (href: string) => (href === '/' ? isHome : path.startsWith(link(href)));
+const shareImage = `${SITE_URL}/og-card.jpg`;
+const BUSINESS = `${SITE_URL}/#business`;
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': BUSINESS,
+  name: COMPANY.name,
+  description: `${COMPANY.name} installs on-grid, off-grid and hybrid solar systems for homes and businesses in Ajmer, Rajasthan, and supplies DCR and non-DCR solar panels and single- and three-phase inverters.`,
+  url: `${SITE_URL}/`,
+  image: shareImage,
+  logo: `${SITE_URL}/icon-512.png`,
+  telephone: CONTACT.phone,
+  ...(CONTACT.email ? { email: CONTACT.email } : {}),
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: ADDRESS.street,
+    addressLocality: ADDRESS.locality,
+    addressRegion: ADDRESS.region,
+    addressCountry: ADDRESS.country,
+    ...(ADDRESS.postalCode ? { postalCode: ADDRESS.postalCode } : {}),
+  },
+  ...(MAP.pin
+    ? { geo: { '@type': 'GeoCoordinates', latitude: Number(MAP.pin.split(',')[0]), longitude: Number(MAP.pin.split(',')[1]) } }
+    : {}),
+  hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP.pin ?? MAP.query)}`,
+  areaServed: { '@type': 'City', name: 'Ajmer' },
+  knowsAbout: ['On-grid solar systems', 'Off-grid solar systems', 'Hybrid solar systems', 'Solar panels', 'Solar inverters'],
+  makesOffer: SOLUTIONS.map((s) => ({
+    '@type': 'Offer',
+    itemOffered: { '@type': 'Service', name: s.name, url: `${SITE_URL}/solar-solutions/${s.slug}/` },
+  })),
+};
+const trail = crumbs ? [{ name: 'Home', href: '/' }, ...crumbs] : [];
+const pageData = isHome
+  ? { '@context': 'https://schema.org', '@type': 'WebSite', '@id': `${SITE_URL}/#website`, name: COMPANY.name, url: `${SITE_URL}/`, inLanguage: 'en-IN', publisher: { '@id': BUSINESS } }
+  : {
+      '@context': 'https://schema.org',
+      '@type': pageType,
+      '@id': `${canonical}#webpage`,
+      name: title,
+      description,
+      url: canonical,
+      inLanguage: 'en-IN',
+      isPartOf: { '@id': `${SITE_URL}/#website` },
+      about: { '@id': BUSINESS },
+      ...(trail.length > 1
+        ? {
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: trail.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.name, item: new URL(link(c.href), SITE_URL).href })),
+            },
+          }
+        : {}),
+    };
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large, max-snippet:-1'} />
+    {!noindex && <link rel="canonical" href={canonical} />}
+    {SEARCH_CONSOLE_TOKEN && <meta name="google-site-verification" content={SEARCH_CONSOLE_TOKEN} />}
+    <link rel="icon" type="image/svg+xml" href={link('/favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="48x48" href={link('/favicon-48.png')} />
+    <link rel="apple-touch-icon" href={link('/apple-touch-icon.png')} />
+    <link rel="manifest" href={link('/site.webmanifest')} />
+    <link rel="sitemap" href={link('/sitemap-index.xml')} />
+    <meta name="theme-color" content="#14532d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_IN" />
+    <meta property="og:site_name" content={COMPANY.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={shareImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${COMPANY.name} - ${COMPANY.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={shareImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(business)} />
+    <script type="application/ld+json" set:html={JSON.stringify(pageData)} />
+    {jsonLd.map((data) => <script type="application/ld+json" set:html={JSON.stringify(data)} />)}
+    {
+      ANALYTICS_ID && (
+        <>
+          <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ANALYTICS_ID}`} />
+          <script is:inline define:vars={{ id: ANALYTICS_ID }}>
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', id);
+          </script>
+        </>
+      )
+    }
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to the content</a>
+    <header class="top">
+      <div class="wrap top-inner">
+        <a class="brand" href={link('/')} aria-label={`${COMPANY.name} - home`}>
+          <Logo size={40} />
+          <span class="wordmark"><strong>Suryodaya</strong><span>Solar Power</span></span>
+        </a>
+        <nav class="nav wide" aria-label="Main">
+          {NAV.map((item) => <a href={link(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>)}
+        </nav>
+        <div class="top-actions">
+          <a class="top-call" href={CONTACT.phoneHref} data-track="call_click"><Icon name="phone" size={18} /><span>{CONTACT.phone}</span></a>
+          <a class="btn btn-sun btn-sm top-quote" href={quoteHref} data-track="quote_click">Get a Free Quote</a>
+          <details class="menu">
+            <summary aria-label="Open the menu"><span aria-hidden="true" class="burger"></span><span class="menu-word">Menu</span></summary>
+            <nav class="menu-panel" aria-label="Menu">
+              {NAV.map((item) => <a href={link(item.href)} aria-current={isCurrent(item.href) ? 'page' : undefined}>{item.label}</a>)}
+              <a class="menu-call" href={CONTACT.phoneHref} data-track="call_click"><Icon name="phone" size={18} />Call {CONTACT.phone}</a>
+            </nav>
+          </details>
+        </div>
+      </div>
+    </header>
+
+    {
+      trail.length > 1 && (
+        <nav class="crumbs wrap" aria-label="Breadcrumb">
+          <ol>
+            {trail.map((c, i) => (
+              <li>{i < trail.length - 1 ? <a href={link(c.href)}>{c.name}</a> : <span aria-current="page">{c.name}</span>}</li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <div class="foot-cols">
+          <div class="foot-brand">
+            <a class="brand on-dark" href={link('/')}>
+              <Logo size={40} />
+              <span class="wordmark"><strong>Suryodaya</strong><span>Solar Power</span></span>
+            </a>
+            <p>On-grid, off-grid and hybrid solar systems for homes and businesses in Ajmer.</p>
+            <address>
+              {ADDRESS.lines.map((line) => <>{line}<br /></>)}
+            </address>
+          </div>
+          <nav aria-label="Solar solutions">
+            <h2>Solar Solutions</h2>
+            <ul role="list">
+              {SOLUTIONS.map((s) => <li><a href={link(`/solar-solutions/${s.slug}/`)}>{s.name}</a></li>)}
+            </ul>
+          </nav>
+          <nav aria-label="Company">
+            <h2>Company</h2>
+            <ul role="list">
+              {NAV.filter((n) => n.href !== '/').map((item) => <li><a href={link(item.href)}>{item.label}</a></li>)}
+            </ul>
+          </nav>
+          <div>
+            <h2>Contact</h2>
+            <ul role="list" class="foot-contact">
+              <li><a href={CONTACT.phoneHref} data-track="call_click"><Icon name="phone" size={18} />{CONTACT.phone}</a></li>
+              <li><a href={whatsappLink()} target="_blank" rel="noopener" data-track="whatsapp_click"><Icon name="whatsapp" size={18} />WhatsApp us</a></li>
+              {CONTACT.email && <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={18} />{CONTACT.email}</a></li>}
+              <li><a href={quoteHref}><Icon name="quote" size={18} />Get a free quote</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="legal">
+          <span>© {year} {COMPANY.name}</span>
+          <a href={link('/privacy-policy/')}>Privacy policy</a>
+        </div>
+      </div>
+    </footer>
+
+    <nav class="action-bar" aria-label="Contact us">
+      <a href={CONTACT.phoneHref} data-track="call_click"><Icon name="phone" size={22} /><span>Call</span></a>
+      <a class="wa" href={whatsappLink()} target="_blank" rel="noopener" data-track="whatsapp_click"><Icon name="whatsapp" size={22} /><span>WhatsApp</span></a>
+      <a class="quote" href={quoteHref} data-track="quote_click"><Icon name="quote" size={22} /><span>Free Quote</span></a>
+    </nav>
+    <a class="wa-float" href={whatsappLink()} target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp" data-track="whatsapp_click">
+      <Icon name="whatsapp" size={30} />
+    </a>
+
+    <script>
+      // the phone menu (a <details>) closes on Escape, a tap outside it, or a tap on one of its links
+      const menu = document.querySelector<HTMLDetailsElement>('details.menu');
+      if (menu) {
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary')?.focus(); }
+        });
+        document.addEventListener('click', (e) => { if (menu.open && !menu.contains(e.target as Node)) menu.open = false; });
+        menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { menu.open = false; }));
+      }
+
+      // sections rise in as they come into view (CSS leaves them alone when motion is reduced)
+      const reveals = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px' });
+        reveals.forEach((el) => io.observe(el));
+      } else {
+        reveals.forEach((el) => el.classList.add('in'));
+      }
+
+      // calls, WhatsApp taps and enquiries counted in Google Analytics, when it is switched on
+      document.addEventListener('click', (e) => {
+        const el = (e.target as HTMLElement).closest<HTMLElement>('[data-track]');
+        const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+        if (el && gtag) gtag('event', el.dataset.track!, { link_url: (el as HTMLAnchorElement).href ?? '', page_path: location.pathname });
+      });
+    </script>
+  </body>
+</html>

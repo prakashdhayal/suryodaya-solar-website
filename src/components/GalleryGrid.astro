@@ -1,0 +1,60 @@
+---
+/**
+ * Photo and video tiles. A tile opens the page's lightbox (Lightbox.astro) - a large photo, or the video playing.
+ * Sample photos carry a "Sample image" badge.
+ */
+import { Image, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import type { GalleryItem } from '../lib/gallery';
+
+interface Props {
+  items: GalleryItem[];
+}
+
+const { items } = Astro.props;
+const tiles = await Promise.all(
+  items.map(async (item) => ({
+    item,
+    full: item.image ? (await getImage({ src: item.image, width: Math.min(1600, item.image.width), format: 'webp', quality: 78 })).src : item.video!,
+  })),
+);
+---
+
+<ul class="gallery-grid" role="list">
+  {
+    tiles.map(({ item, full }) => (
+      <li class="reveal" data-kind={item.kind}>
+        <button
+          type="button"
+          class="tile"
+          data-gallery-item
+          data-kind={item.kind}
+          data-full={full}
+          data-alt={item.alt}
+          data-caption={item.caption}
+          aria-label={`${item.kind === 'video' ? 'Play' : 'View'}: ${item.alt}`}>
+          {item.image ? (
+            <Image
+              src={item.image}
+              alt=""
+              widths={[400, 700]}
+              sizes="(min-width: 1250px) 390px, (min-width: 900px) 31vw, 48vw"
+              format="webp"
+              quality={70}
+              loading="lazy"
+            />
+          ) : (
+            <video src={`${item.video}#t=0.5`} preload="metadata" muted playsinline tabindex="-1" aria-hidden="true" />
+          )}
+          {item.kind === 'video' && (
+            <span class="play" aria-hidden="true">
+              <Icon name="play" size={26} />
+            </span>
+          )}
+          {item.sample && <span class="badge">Sample image</span>}
+          {item.caption && <span class="tile-caption">{item.caption}</span>}
+        </button>
+      </li>
+    ))
+  }
+</ul>

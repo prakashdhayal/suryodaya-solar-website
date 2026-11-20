@@ -1,0 +1,81 @@
+---
+/**
+ * One per page with a gallery: the browser's own <dialog>, so Escape, focus and the backdrop work as expected. Arrow
+ * keys and the buttons move through the tiles that are showing (the Photos / Videos filter hides some); a swipe does
+ * the same on a phone.
+ */
+import Icon from './Icon.astro';
+---
+
+<dialog class="lightbox" aria-label="Gallery viewer">
+  <div class="lb-stage"></div>
+  <p class="lb-caption"></p>
+  <span class="lb-count"></span>
+  <button type="button" class="lb-btn lb-close" aria-label="Close"><Icon name="close" /></button>
+  <button type="button" class="lb-btn lb-prev" aria-label="Previous"><Icon name="left" /></button>
+  <button type="button" class="lb-btn lb-next" aria-label="Next"><Icon name="right" /></button>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('dialog.lightbox');
+  if (dialog) {
+    const stage = dialog.querySelector<HTMLElement>('.lb-stage')!;
+    const caption = dialog.querySelector<HTMLElement>('.lb-caption')!;
+    const count = dialog.querySelector<HTMLElement>('.lb-count')!;
+    let tiles: HTMLElement[] = [];
+    let index = 0;
+
+    const visibleTiles = () =>
+      [...document.querySelectorAll<HTMLElement>('[data-gallery-item]')].filter((t) => t.offsetParent !== null);
+
+    function show(i: number) {
+      index = (i + tiles.length) % tiles.length;
+      const tile = tiles[index];
+      const { kind, full, alt, caption: text } = tile.dataset;
+      stage.replaceChildren();
+      if (kind === 'video') {
+        const video = document.createElement('video');
+        video.src = full!;
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.setAttribute('aria-label', alt ?? '');
+        stage.append(video);
+      } else {
+        const img = document.createElement('img');
+        img.src = full!;
+        img.alt = alt ?? '';
+        stage.append(img);
+      }
+      caption.textContent = text || '';
+      count.textContent = `${index + 1} / ${tiles.length}`;
+    }
+
+    document.addEventListener('click', (e) => {
+      const tile = (e.target as HTMLElement).closest<HTMLElement>('[data-gallery-item]');
+      if (!tile) return;
+      tiles = visibleTiles();
+      show(tiles.indexOf(tile));
+      dialog.showModal();
+    });
+
+    dialog.querySelector('.lb-close')!.addEventListener('click', () => dialog.close());
+    dialog.querySelector('.lb-prev')!.addEventListener('click', () => show(index - 1));
+    dialog.querySelector('.lb-next')!.addEventListener('click', () => show(index + 1));
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => stage.replaceChildren());
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') show(index - 1);
+      if (e.key === 'ArrowRight') show(index + 1);
+    });
+
+    let startX: number | null = null;
+    stage.addEventListener('touchstart', (e) => { startX = e.touches[0].clientX; }, { passive: true });
+    stage.addEventListener('touchend', (e) => {
+      if (startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 50) show(index + (dx < 0 ? 1 : -1));
+      startX = null;
+    });
+  }
+</script>

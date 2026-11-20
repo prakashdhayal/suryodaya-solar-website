@@ -1,0 +1,17 @@
+---
+/** A section's eyebrow, heading and lead line. */
+interface Props {
+  eyebrow?: string;
+  heading: string;
+  lead?: string;
+  center?: boolean;
+  id?: string;
+}
+const { eyebrow, heading, lead, center = false, id } = Astro.props;
+---
+
+<header class:list={['section-head', 'reveal', { center }]}>
+  {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+  <h2 id={id}>{heading}</h2>
+  {lead && <p class="lead">{lead}</p>}
+</header>

@@ -1,0 +1,81 @@
+---
+import CtaBand from '../components/CtaBand.astro';
+import GalleryGrid from '../components/GalleryGrid.astro';
+import Icon from '../components/Icon.astro';
+import Lightbox from '../components/Lightbox.astro';
+import Base from '../layouts/Base.astro';
+import { galleryByMonth, galleryItems } from '../lib/gallery';
+
+const months = galleryByMonth();
+const items = galleryItems();
+const samples = items.some((i) => i.sample);
+const hasVideos = items.some((i) => i.kind === 'video');
+const photoCount = items.filter((i) => i.kind === 'photo').length;
+const videoCount = items.length - photoCount;
+---
+
+<Base
+  title="Projects & Gallery"
+  fullTitle="Solar Installation Photos & Videos | Suryodaya Solar Power"
+  description="Photos and videos of solar installations by Suryodaya Solar Power in Ajmer - rooftop and ground-mounted, residential and commercial."
+  pageType="CollectionPage"
+  crumbs={[{ name: 'Projects', href: '/projects/' }]}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Projects & gallery</span>
+      <h1>Our Solar Installations</h1>
+      <p class="lead">Photos and videos from our installation work, newest first.</p>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap">
+      {
+        samples && (
+          <div class="notice">
+            <Icon name="sun" size={20} />
+            <p>These are sample images. Photos and videos of our own installations will appear here as they are added.</p>
+          </div>
+        )
+      }
+      {
+        hasVideos && (
+          <div class="filters" role="group" aria-label="Show">
+            <button type="button" data-filter="all" aria-pressed="true">All ({items.length})</button>
+            <button type="button" data-filter="photo" aria-pressed="false">Photos ({photoCount})</button>
+            <button type="button" data-filter="video" aria-pressed="false">Videos ({videoCount})</button>
+          </div>
+        )
+      }
+      {
+        months.map((m) => (
+          <section class="month" aria-label={m.label}>
+            {(months.length > 1 || m.month) && <h2>{m.label}</h2>}
+            <GalleryGrid items={m.items} />
+          </section>
+        ))
+      }
+    </div>
+  </section>
+
+  <CtaBand heading="Want a system like these?" />
+  <Lightbox />
+</Base>
+
+<script>
+  // Photos / Videos: hide the other kind, and a month left with nothing to show
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => {
+      const want = button.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+      document.querySelectorAll<HTMLElement>('.gallery-grid > li').forEach((li) => {
+        li.hidden = want !== 'all' && li.dataset.kind !== want;
+      });
+      document.querySelectorAll<HTMLElement>('.month').forEach((month) => {
+        month.hidden = !month.querySelector('.gallery-grid > li:not([hidden])');
+      });
+    }),
+  );
+</script>

@@ -1,0 +1,75 @@
+---
+import ContactSection from '../../components/ContactSection.astro';
+import SectionHead from '../../components/SectionHead.astro';
+import ServiceCards from '../../components/ServiceCards.astro';
+import ActionButtons from '../../components/ActionButtons.astro';
+import Base from '../../layouts/Base.astro';
+
+const ROWS = [
+  ['Needs a grid connection', 'Yes', 'No', 'Yes'],
+  ['Batteries', 'No', 'Yes', 'Yes'],
+  ['Power during a power cut', 'No', 'Yes', 'Yes'],
+  ['Extra power goes to the grid', 'Yes, with net metering', 'No', 'Yes, with net metering'],
+  ['Suits', 'Regular grid supply', 'No grid or unreliable grid', 'Frequent power cuts'],
+];
+---
+
+<Base
+  title="Solar Solutions"
+  fullTitle="Solar Panel Installation in Ajmer | Suryodaya Solar Power"
+  description="Solar panel installation in Ajmer: on-grid, off-grid and hybrid solar systems and domestic and commercial solar plants. Compare them and get a free quote."
+  pageType="CollectionPage"
+  crumbs={[{ name: 'Solar Solutions', href: '/solar-solutions/' }]}
+  quoteHref="#enquiry"
+>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Solar solutions</span>
+      <h1>Solar Panel Installation in Ajmer</h1>
+      <p class="lead">On-grid, off-grid and hybrid systems, for homes and for businesses. Here is how they differ and which one may suit you.</p>
+      <ActionButtons quoteHref="#enquiry" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <ServiceCards />
+    </div>
+  </section>
+
+  <section class="section alt" aria-labelledby="compare-title">
+    <div class="wrap">
+      <SectionHead
+        id="compare-title"
+        eyebrow="Compare"
+        heading="On-grid, off-grid or hybrid?"
+        lead="The three systems differ in whether they use the grid and whether they keep batteries."
+      />
+      <div class="compare-wrap reveal">
+        <table class="compare">
+          <caption class="sr-only">On-grid, off-grid and hybrid solar systems compared</caption>
+          <thead>
+            <tr>
+              <th scope="col"><span class="sr-only">Feature</span></th>
+              <th scope="col">On-grid</th>
+              <th scope="col">Off-grid</th>
+              <th scope="col">Hybrid</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              ROWS.map(([label, ...cells]) => (
+                <tr>
+                  <th scope="row">{label}</th>
+                  {cells.map((c) => <td>{c}</td>)}
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <ContactSection heading="Not sure which one you need?" lead="Tell us about your place and your power use - we will suggest the right system." />
+</Base>
