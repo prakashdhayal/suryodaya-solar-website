@@ -3,9 +3,9 @@
 import Icon from './Icon.astro';
 import { ADDRESS, COMPANY, MAP } from '../data/site';
 
-const target = MAP.pin ?? MAP.query;
-const embed = `https://maps.google.com/maps?q=${encodeURIComponent(target)}&z=${MAP.pin ? 17 : 15}&output=embed`;
-const open = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(target)}`;
+const centre = MAP.pin ? `&ll=${MAP.pin}` : '';
+const embed = `https://maps.google.com/maps?q=${encodeURIComponent(MAP.query)}${centre}&z=${MAP.pin ? 17 : 15}&output=embed`;
+const open = MAP.listing ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP.query)}`;
 ---
 
 <div class="map">

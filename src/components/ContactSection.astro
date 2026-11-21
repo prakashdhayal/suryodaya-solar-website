@@ -41,8 +41,7 @@ const Heading = level === 1 ? 'h1' : 'h2';
             <strong>Office</strong>
             <address>
               {COMPANY.name}<br />
-              {ADDRESS.lines.map((l) => <>{l}<br /></>)}
-              {ADDRESS.postalCode ?? <Tbd what="PIN code" />}
+              {ADDRESS.lines.map((l, i) => <>{l}{i < ADDRESS.lines.length - 1 && <br />}</>)}
             </address>
           </div>
         </li>

@@ -138,16 +138,8 @@ const samples = recent.some((i) => i.sample);
         center
       />
       <div class="brand-block">
-        <div class="reveal">
-          <h3><span class="chip-icon"><Icon name="panel" /></span>Solar panel brands</h3>
-          <ul class="tags" role="list"><li class="tag">DCR</li><li class="tag">Non-DCR</li></ul>
-          <BrandGrid brands={PANEL_BRANDS} label="Solar panel brands" />
-        </div>
-        <div class="reveal">
-          <h3><span class="chip-icon"><Icon name="inverter" /></span>Inverter brands</h3>
-          <ul class="tags" role="list"><li class="tag">Single-phase</li><li class="tag">Three-phase</li></ul>
-          <BrandGrid brands={INVERTER_BRANDS} label="Inverter brands" />
-        </div>
+        <BrandGrid brands={PANEL_BRANDS} title="Solar panel brands" icon="panel" kinds={['DCR', 'non-DCR']} />
+        <BrandGrid brands={INVERTER_BRANDS} title="Inverter brands" icon="inverter" kinds={['single-phase', 'three-phase']} />
       </div>
       <div class="section-foot"><a class="btn btn-ghost" href={link('/products/')}>See products & brands <Icon name="arrow" size={18} /></a></div>
     </div>

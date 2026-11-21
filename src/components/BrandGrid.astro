@@ -1,12 +1,35 @@
 ---
-/** Brand names as tiles (names, not logos). */
+/**
+ * A card of brands: a dark header (icon, title, how many brands, the kinds supplied) over the brand names as pills, each
+ * with its initial in a coloured disc. Names, not logos - a maker's logo is theirs to allow.
+ */
+import Icon from './Icon.astro';
+
 interface Props {
   brands: readonly string[];
-  label: string;
+  title: string;
+  icon: 'panel' | 'inverter';
+  kinds: readonly string[];
 }
-const { brands, label } = Astro.props;
+const { brands, title, icon, kinds } = Astro.props;
 ---
 
-<ul class="brand-grid" role="list" aria-label={label}>
-  {brands.map((b) => <li class="brand-tile reveal">{b}</li>)}
-</ul>
+<div class="brand-card reveal">
+  <div class="brand-card-head">
+    <span class="chip-icon"><Icon name={icon} /></span>
+    <div>
+      <h3>{title}</h3>
+      <p>{brands.length} brands · {kinds.map((k) => k.replace('-', '‑')).join(' and ')}</p>
+    </div>
+  </div>
+  <ul class="brand-pills" role="list" aria-label={title}>
+    {
+      brands.map((b, i) => (
+        <li class="brand-pill">
+          <span class={`brand-mark m${i % 3}`} aria-hidden="true">{b[0]}</span>
+          {b}
+        </li>
+      ))
+    }
+  </ul>
+</div>
