@@ -30,22 +30,23 @@ export const COMPANY = {
 } as const;
 
 export const ADDRESS = {
-  lines: ['Plot No. 31, Krishna Vihar Colony', 'Near Kabir Ashram, Lohagal', 'Ajmer, Rajasthan'],
-  oneLine: 'Plot No. 31, Krishna Vihar Colony, Near Kabir Ashram, Lohagal, Ajmer, Rajasthan',
+  lines: ['Plot No. 31, Krishna Vihar Colony', 'Near Kabir Ashram, Lohagal', 'Ajmer, Rajasthan 305004'],
+  oneLine: 'Plot No. 31, Krishna Vihar Colony, Near Kabir Ashram, Lohagal, Ajmer, Rajasthan 305004',
   street: 'Plot No. 31, Krishna Vihar Colony, Near Kabir Ashram, Lohagal',
   locality: 'Ajmer',
   region: 'Rajasthan',
   country: 'IN',
-  postalCode: TBD as string | null,
+  postalCode: '305004' as string | null,
 } as const;
 
 /**
- * The map: what Google is asked to find. Once the client sends the office's Google Maps link (or its exact pin),
- * put the coordinates in `pin` ("26.4499,74.6399") and the map points at the door instead of the street.
+ * The map: the company's own Google listing (Maps: photos, hours, reviews) - found by `query`, centred on its pin - and
+ * its link for "Open in Google Maps". Searching the name shows the listing's card on the map; the bare pin would not.
  */
 export const MAP = {
-  query: ADDRESS.oneLine,
-  pin: TBD as string | null,
+  query: 'Suryodaya Solar Power, Lohagal, Ajmer',
+  pin: '26.5122871,74.652463' as string | null,
+  listing: 'https://maps.google.com/?cid=15367139239213042355' as string | null,
 };
 
 const whatsappDigits = '918078681486';
@@ -57,8 +58,15 @@ export const CONTACT = {
   whatsappNumber: '+91 80786 81486',
   whatsappDigits,
   email: TBD as string | null,
-  hours: TBD as string | null,
+  hours: 'Monday to Saturday, 9 AM to 5 PM; closed on Sunday' as string | null,
 } as const;
+
+/** The same office hours for search engines (structured data); null leaves them out. */
+export const OPENING_HOURS = {
+  days: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  opens: '09:00',
+  closes: '17:00',
+} as { days: string[]; opens: string; closes: string } | null;
 
 /** A WhatsApp chat with the company, with a first message typed in for the visitor. */
 export function whatsappLink(text = `Hello ${COMPANY.name}, I would like to know about solar for my place.`) {

@@ -68,7 +68,7 @@ that. To remove a photo, delete its file and push.
 Anything the client has not given us shows on the page as **[... - to be provided]** and is left out of the structured
 data. `npm run check:placeholders` (also run by every build) lists them. Still open:
 
-- email, office hours, PIN code, the exact map pin, the company's own story (About)
+- email and the company's own story (About); the PIN, map pin and office hours come from its Google listing (21 Nov 2026)
 - the privacy policy's "last updated" date, once the client approves it
 
 ## Enquiries

@@ -18,6 +18,7 @@ import {
   COMPANY,
   CONTACT,
   MAP,
+  OPENING_HOURS,
   link,
   NAV,
   PREVIEW,
@@ -82,7 +83,10 @@ const business = {
   ...(MAP.pin
     ? { geo: { '@type': 'GeoCoordinates', latitude: Number(MAP.pin.split(',')[0]), longitude: Number(MAP.pin.split(',')[1]) } }
     : {}),
-  hasMap: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP.pin ?? MAP.query)}`,
+  hasMap: MAP.listing ?? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(MAP.query)}`,
+  ...(OPENING_HOURS
+    ? { openingHoursSpecification: { '@type': 'OpeningHoursSpecification', dayOfWeek: OPENING_HOURS.days, opens: OPENING_HOURS.opens, closes: OPENING_HOURS.closes } }
+    : {}),
   areaServed: { '@type': 'City', name: 'Ajmer' },
   knowsAbout: ['On-grid solar systems', 'Off-grid solar systems', 'Hybrid solar systems', 'Solar panels', 'Solar inverters'],
   makesOffer: SOLUTIONS.map((s) => ({

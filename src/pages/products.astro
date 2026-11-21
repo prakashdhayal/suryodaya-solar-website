@@ -37,8 +37,7 @@ import { link } from '../data/site';
           ))
         }
       </div>
-      <h3 class="brands-title reveal"><span class="chip-icon"><Icon name="panel" /></span>Solar panel brands</h3>
-      <BrandGrid brands={PANEL_BRANDS} label="Solar panel brands" />
+      <div class="brand-solo"><BrandGrid brands={PANEL_BRANDS} title="Solar panel brands" icon="panel" kinds={['DCR', 'non-DCR']} /></div>
     </div>
   </section>
 
@@ -55,8 +54,7 @@ import { link } from '../data/site';
           ))
         }
       </div>
-      <h3 class="brands-title reveal"><span class="chip-icon"><Icon name="inverter" /></span>Inverter brands</h3>
-      <BrandGrid brands={INVERTER_BRANDS} label="Inverter brands" />
+      <div class="brand-solo"><BrandGrid brands={INVERTER_BRANDS} title="Inverter brands" icon="inverter" kinds={['single-phase', 'three-phase']} /></div>
     </div>
   </section>
 
