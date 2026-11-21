@@ -1,0 +1,9 @@
+---
+/** An email address that a narrow screen wraps after the "@", never inside "gmail.com". */
+interface Props {
+  address: string;
+}
+const [user, domain] = Astro.props.address.split('@');
+---
+
+{user}@<wbr />{domain}

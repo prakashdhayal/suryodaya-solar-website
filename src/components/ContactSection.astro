@@ -3,6 +3,7 @@
 import EnquiryForm from './EnquiryForm.astro';
 import Icon from './Icon.astro';
 import MapEmbed from './MapEmbed.astro';
+import EmailText from './EmailText.astro';
 import Tbd from './Tbd.astro';
 import { ADDRESS, COMPANY, CONTACT, whatsappLink } from '../data/site';
 import type { Requirement, SystemType } from '../data/solutions';
@@ -63,7 +64,7 @@ const Heading = level === 1 ? 'h1' : 'h2';
           <span class="chip-icon"><Icon name="mail" /></span>
           <div>
             <strong>Email</strong>
-            {CONTACT.email ? <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a> : <Tbd what="Email" />}
+            {CONTACT.email ? <a href={`mailto:${CONTACT.email}`}><EmailText address={CONTACT.email} /></a> : <Tbd what="Email" />}
           </div>
         </li>
         <li>
