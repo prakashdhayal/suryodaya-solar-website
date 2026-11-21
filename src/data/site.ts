@@ -6,11 +6,11 @@
 export const TBD = null;
 
 /**
- * The live address of the site. Until the client's domain is connected it is GitHub's own address, a sub-folder of
- * prakashdhayal.github.io - a preview, kept out of search results. When the domain comes: put it here (no path, e.g.
- * 'https://www.example.in') and set it in GitHub › Settings › Pages; links, sitemap and indexing follow.
+ * The live address of the site: the client's own domain (also public/CNAME and GitHub › Settings › Pages). Links,
+ * sitemap and indexing follow it. On GitHub's own address (a sub-folder of <user>.github.io) the site would be a
+ * preview, kept out of search results.
  */
-export const SITE_URL = 'https://prakashdhayal.github.io/suryodaya-solar-website';
+export const SITE_URL = 'https://suryodayasolarpower.in';
 
 /** The sub-folder the site sits in: '' on its own domain, '/suryodaya-solar-website' on GitHub's address. */
 export const BASE_PATH = new URL(SITE_URL).pathname.replace(/\/$/, '');
