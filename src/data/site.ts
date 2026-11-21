@@ -6,11 +6,11 @@
 export const TBD = null;
 
 /**
- * The live address of the site. Until the client's domain is connected it is GitHub's own address, a sub-folder of
- * prakashdhayal.github.io - a preview, kept out of search results. When the domain comes: put it here (no path, e.g.
- * 'https://www.example.in') and set it in GitHub › Settings › Pages; links, sitemap and indexing follow.
+ * The live address of the site: the client's own domain (also public/CNAME and GitHub › Settings › Pages). Links,
+ * sitemap and indexing follow it. On GitHub's own address (a sub-folder of <user>.github.io) the site would be a
+ * preview, kept out of search results.
  */
-export const SITE_URL = 'https://prakashdhayal.github.io/suryodaya-solar-website';
+export const SITE_URL = 'https://suryodayasolarpower.in';
 
 /** The sub-folder the site sits in: '' on its own domain, '/suryodaya-solar-website' on GitHub's address. */
 export const BASE_PATH = new URL(SITE_URL).pathname.replace(/\/$/, '');
@@ -48,16 +48,13 @@ export const MAP = {
   pin: TBD as string | null,
 };
 
-const whatsappDigits = '916376154794';
+const whatsappDigits = '918078681486';
 
-/**
- * Phone and WhatsApp. 63761 54794 is used for both for now (the number we were given); calls go to it too until the
- * client gives a separate calling number.
- */
+/** Phone and WhatsApp: the client's mobile, 80786 81486, for both. */
 export const CONTACT = {
-  phone: '+91 63761 54794',
-  phoneHref: 'tel:+916376154794',
-  whatsappNumber: '+91 63761 54794',
+  phone: '+91 80786 81486',
+  phoneHref: 'tel:+918078681486',
+  whatsappNumber: '+91 80786 81486',
   whatsappDigits,
   email: TBD as string | null,
   hours: TBD as string | null,

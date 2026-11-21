@@ -1,17 +1,21 @@
 ---
-/** The mark until the client sends their logo: a sun rising over the horizon (Suryodaya). public/favicon.svg is the same. */
+/**
+ * The client's SSP logo. It was drawn on black, so its silver letters vanish on white: on a light background it sits on
+ * a dark tile (`tile`), on a dark one it stands as it is. The cut-out (src/assets/brand/ssp-logo.png) was made from
+ * ssp-logo-original.jpg - brightness became opacity, so the glow stays soft on any dark colour.
+ */
+import { Image } from 'astro:assets';
+import logo from '../assets/brand/ssp-logo.png';
+
 interface Props {
-  size?: number;
+  /** Height in CSS pixels; the width follows the logo's shape. */
+  height?: number;
+  tile?: boolean;
 }
-const { size = 40 } = Astro.props;
+const { height = 40, tile = false } = Astro.props;
+const width = Math.round((height * logo.width) / logo.height);
 ---
 
-<svg class="logo" width={size} height={size} viewBox="0 0 48 48" aria-hidden="true" focusable="false">
-  <rect width="48" height="48" rx="12" fill="#15803d"></rect>
-  <g stroke="#fbbf24" stroke-width="2.6" stroke-linecap="round">
-    <path d="M13.6 21 10.1 19M18 16.6l-2-3.5M24 15v-4M30 16.6l2-3.5M34.4 21l3.5-2"></path>
-  </g>
-  <path d="M15 28a9 9 0 0 1 18 0z" fill="#fbbf24"></path>
-  <path d="M8 28.5h32" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path>
-  <path d="M13 34.5h22M17.5 40h13" stroke="#fff" stroke-opacity=".75" stroke-width="2.4" stroke-linecap="round"></path>
-</svg>
+<span class:list={['logo', { 'logo-tile': tile }]}>
+  <Image src={logo} alt="" width={width} height={height} densities={[1, 2]} format="webp" quality={85} loading="eager" />
+</span>

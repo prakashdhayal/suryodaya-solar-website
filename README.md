@@ -3,9 +3,8 @@
 The website of **Suryodaya Solar Power**, Ajmer - built with [Astro](https://astro.build) as plain static pages and
 published by GitHub Pages on every push to `main` (`.github/workflows/deploy.yml`).
 
-- **Now (preview):** https://prakashdhayal.github.io/suryodaya-solar-website/ - GitHub's own address, a sub-folder; every
-  page says `noindex` so search engines leave it alone while placeholders remain.
-- **Later:** the client's domain (see *Connecting the domain*).
+- **Live:** https://suryodayasolarpower.in (domain at GoDaddy, see *The domain*). The old preview address,
+  https://prakashdhayal.github.io/suryodaya-solar-website/, is sent on to it by GitHub.
 
 ## Run it
 
@@ -62,17 +61,15 @@ that. To remove a photo, delete its file and push.
 | Pages | `src/pages/` (home, solar-solutions + one per solution, products, projects, about, contact, privacy-policy, 404) |
 | Look | `src/styles/global.css` (green and white tokens at the top; Poppins + Inter served from the site) |
 | Site photos (hero, sections) | `src/assets/site/` - free Unsplash photos, replace with the client's when they have good ones |
-| Logo mark | `components/Logo.astro` and `public/favicon.svg` (a stand-in until the client's logo arrives) |
+| Logo | `src/assets/brand/`: the client's original (on black) and the transparent cut-out made from it; `components/Logo.astro` (a dark tile on light backgrounds); icons and `og-card.jpg` in `public/` |
 
 ## Placeholders
 
 Anything the client has not given us shows on the page as **[... - to be provided]** and is left out of the structured
 data. `npm run check:placeholders` (also run by every build) lists them. Still open:
 
-- the domain (`SITE_URL` - GitHub's address until then), email, office hours, PIN code, the exact map pin, the company's own story (About)
+- email, office hours, PIN code, the exact map pin, the company's own story (About)
 - the privacy policy's "last updated" date, once the client approves it
-- calls currently go to the WhatsApp number (63761 54794) - change `CONTACT.phone` when they give a calling number
-- the logo
 
 ## Enquiries
 
@@ -90,25 +87,23 @@ floating button on bigger screens).
 
 ## Links inside the site
 
-Every internal address goes through `link()` from `src/data/site.ts` (`href={link('/products/')}`): on GitHub's
-address it adds the `/suryodaya-solar-website` sub-folder, on the domain nothing. Never write a bare `href="/..."`.
+Every internal address goes through `link()` from `src/data/site.ts` (`href={link('/products/')}`): on the domain it
+adds nothing, on a GitHub sub-folder address it would add the sub-folder. Never write a bare `href="/..."`.
 
-## Connecting the domain (once the client has it)
+## The domain
 
-1. DNS at the client's registrar (table below, the same as kpktrinextechnologies.in).
-2. **GitHub › Settings › Pages › Custom domain** = the domain (www or bare - pick one); *Enforce HTTPS* once the
-   certificate is issued. GitHub then sends the old github.io address to the domain.
-3. In `src/data/site.ts` set `SITE_URL` to the domain with no path (`https://www.example.in`). The sub-folder goes, the
-   pages become indexable, canonical links, sitemap, robots.txt and the share card follow. Commit on a branch, PR, merge.
+`suryodayasolarpower.in` (bought at GoDaddy, 21 Nov 2026), the bare domain; `www` is sent on to it by GitHub. It is set
+in three places that must agree: `SITE_URL` in `src/data/site.ts`, `public/CNAME`, and **GitHub › Settings › Pages ›
+Custom domain** (with *Enforce HTTPS* on once GitHub has issued the certificate).
 
-DNS records:
+DNS records at GoDaddy (the same as kpktrinextechnologies.in):
 
    | Type | Name | Value |
    |---|---|---|
    | A | @ | 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153 |
    | AAAA | @ | 2606:50c0:8000::153, 2606:50c0:8001::153, 2606:50c0:8002::153, 2606:50c0:8003::153 |
-   | CNAME | www | `<github-user>.github.io` |
-   | TXT | `_github-pages-challenge-<github-user>` | from GitHub › Settings › Pages › Verified domains |
+   | CNAME | www | `prakashdhayal.github.io` |
+   | TXT | `_github-pages-challenge-prakashdhayal` | from GitHub › Settings (account) › Pages › Verified domains |
 
 ## Google
 
