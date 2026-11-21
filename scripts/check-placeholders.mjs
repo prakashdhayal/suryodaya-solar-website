@@ -18,9 +18,13 @@ if (/SITE_URL = '[^']*\.github\.io/.test(site)) {
 function walk(dir) {
   return fs.readdirSync(dir, { withFileTypes: true }).flatMap((e) => (e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]));
 }
+// A marker standing alone on a page; one after `??` or `:` is only the fallback for a site.ts value, listed above.
 for (const file of walk(path.join(root, 'src')).filter((f) => f.endsWith('.astro'))) {
-  for (const m of fs.readFileSync(file, 'utf8').matchAll(/<Tbd what="([^"]+)"/g)) {
-    missing.push(`${path.relative(root, file).split(path.sep).join('/')}: ${m[1]}`);
+  for (const line of fs.readFileSync(file, 'utf8').split('\n')) {
+    if (/\?\?\s*<Tbd|:\s*(<>\s*)?<Tbd/.test(line)) continue;
+    for (const m of line.matchAll(/<Tbd what="([^"]+)"/g)) {
+      missing.push(`${path.relative(root, file).split(path.sep).join('/')}: ${m[1]}`);
+    }
   }
 }
 

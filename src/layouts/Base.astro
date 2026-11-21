@@ -9,6 +9,7 @@ import '@fontsource-variable/inter';
 import '@fontsource/poppins/600.css';
 import '@fontsource/poppins/700.css';
 import '../styles/global.css';
+import EmailText from '../components/EmailText.astro';
 import Icon from '../components/Icon.astro';
 import Logo from '../components/Logo.astro';
 import { SOLUTIONS } from '../data/solutions';
@@ -238,7 +239,7 @@ const year = new Date().getFullYear();
             <ul role="list" class="foot-contact">
               <li><a href={CONTACT.phoneHref} data-track="call_click"><Icon name="phone" size={18} />{CONTACT.phone}</a></li>
               <li><a href={whatsappLink()} target="_blank" rel="noopener" data-track="whatsapp_click"><Icon name="whatsapp" size={18} />WhatsApp us</a></li>
-              {CONTACT.email && <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={18} />{CONTACT.email}</a></li>}
+              {CONTACT.email && <li><a href={`mailto:${CONTACT.email}`}><Icon name="mail" size={18} /><span><EmailText address={CONTACT.email} /></span></a></li>}
               <li><a href={quoteHref}><Icon name="quote" size={18} />Get a free quote</a></li>
             </ul>
           </div>

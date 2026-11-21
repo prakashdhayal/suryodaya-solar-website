@@ -782,7 +782,7 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
 .contact-list { display: grid; gap: 18px; }
 .contact-list li { display: flex; gap: 14px; align-items: flex-start; }
 .contact-list strong { display: block; color: var(--ink); font-size: 0.95rem; }
-.contact-list a { font-weight: 600; word-break: break-word; }
+.contact-list a { font-weight: 600; overflow-wrap: anywhere; }
 
 .map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--green-50); }
 .map iframe { display: block; width: 100%; aspect-ratio: 4 / 3; border: 0; }
@@ -875,7 +875,8 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
 }
 .foot-brand p { margin: 16px 0 10px; max-width: 34ch; }
 .foot ul { display: grid; gap: 8px; }
-.foot-contact a { display: inline-flex; align-items: center; gap: 8px; }
+.foot-contact a { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; }
+.foot-contact a span { min-width: 0; overflow-wrap: anywhere; }
 .legal {
   display: flex; flex-wrap: wrap; gap: 8px 20px; justify-content: space-between;
   border-top: 1px solid rgb(255 255 255 / 0.14);

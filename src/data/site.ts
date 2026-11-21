@@ -25,8 +25,8 @@ export const COMPANY = {
   name: 'Suryodaya Solar Power',
   short: 'Suryodaya Solar',
   tagline: 'Solar power for homes and businesses in Ajmer',
-  /** One or two lines about the company in the client's own words - TBD until they send them. */
-  story: TBD as string | null,
+  /** A few lines about the company (About › Who we are) - nothing in it the company hasn't told us. */
+  story: "Suryodaya means sunrise, and that is the idea behind the company: to put the sunshine falling on Ajmer's roofs to work for the homes and businesses beneath them. We size each system to how the place actually uses power, fit panels and inverters from brands people know, and explain the options plainly - what each system does and what it doesn't - so you can decide with confidence." as string | null,
 } as const;
 
 export const ADDRESS = {
@@ -57,7 +57,7 @@ export const CONTACT = {
   phoneHref: 'tel:+918078681486',
   whatsappNumber: '+91 80786 81486',
   whatsappDigits,
-  email: TBD as string | null,
+  email: 'suryodayasolar26@gmail.com' as string | null,
   hours: 'Monday to Saturday, 9 AM to 5 PM; closed on Sunday' as string | null,
 } as const;
 
