@@ -1,0 +1,43 @@
+---
+/** Notice cards: the type, the day, the title and its lines, and where to go. An ended notice says so. */
+import Icon from './Icon.astro';
+import { displayDay, noticeLink, type Notice } from '../lib/notices';
+
+interface Props {
+  notices: Notice[];
+  /** h3 under a section's heading (default), h2 where the cards are the page's own list. */
+  headingLevel?: 'h2' | 'h3';
+}
+
+const { notices, headingLevel: H = 'h3' } = Astro.props;
+const TYPE_ICON: Record<Notice['type'], string> = { Subsidy: 'sun', Offer: 'check', Holiday: 'clock', Update: 'chat', Project: 'panel' };
+---
+
+<ul class="news-grid" role="list">
+  {
+    notices.map((n) => (
+      <li class:list={['news-card', 'reveal', `t-${n.type.toLowerCase()}`, { ended: n.ended }]} data-until={n.ended ? undefined : n.showUntil}>
+        <div class="news-meta">
+          <span class="news-type">
+            <Icon name={TYPE_ICON[n.type]} size={16} />
+            {n.type}
+          </span>
+          <time datetime={n.date}>{displayDay(n.date)}</time>
+        </div>
+        <H class="news-title">
+          <a class="stretch" href={n.href}>{n.title}</a>
+        </H>
+        <p>{n.summary}</p>
+        {n.ended ? (
+          <p class="news-until ended">Ended {displayDay(n.showUntil!)}</p>
+        ) : (
+          n.showUntil && <p class="news-until">Until {displayDay(n.showUntil)}</p>
+        )}
+        <a class="news-go" href={noticeLink(n)}>
+          {n.linkText ?? 'Read more'}
+          <Icon name="arrow" size={16} />
+        </a>
+      </li>
+    ))
+  }
+</ul>

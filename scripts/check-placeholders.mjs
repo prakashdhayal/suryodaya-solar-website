@@ -1,5 +1,5 @@
 // Lists what the client still has to give us: every TBD in src/data/site.ts, every <Tbd> marker on a page, the
-// placeholder domain, and whether the gallery is still showing samples. Runs before each build; only warns.
+// placeholder domain, and whether the installations are still samples. Runs before each build; only warns.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -28,11 +28,14 @@ for (const file of walk(path.join(root, 'src')).filter((f) => f.endsWith('.astro
   }
 }
 
-const media = (dir, ext) =>
-  fs.existsSync(dir) ? walk(dir).filter((f) => ext.test(f)).length : 0;
-const photos = media(path.join(root, 'src/assets/gallery'), /\.(jpe?g|png|webp|avif)$/i);
-const videos = media(path.join(root, 'public/gallery/videos'), /\.mp4$/i);
-if (photos + videos === 0) missing.push('gallery: no photos or videos of real installations yet (sample images are shown)');
+const installs = path.join(root, 'src/installations');
+const real = fs.existsSync(installs)
+  ? fs.readdirSync(installs).filter((d) => {
+      const file = path.join(installs, d, 'details.yaml');
+      return fs.existsSync(file) && !/^sample:\s*true/m.test(fs.readFileSync(file, 'utf8'));
+    })
+  : [];
+if (!real.length) missing.push('installations: no real customer yet (the sample installations are shown)');
 
 if (missing.length) {
   console.warn(`\n[placeholders] Still to be provided (${missing.length}) - shown on the site as "[... - to be provided]":`);

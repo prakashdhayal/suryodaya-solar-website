@@ -1,4 +1,5 @@
-# Builds the site and publishes it on GitHub Pages on every push to main (the custom domain is set in Settings › Pages).
+# Builds the site and publishes it on GitHub Pages on every push to main (the custom domain is set in Settings › Pages),
+# and again every night just after midnight in India, so a notice leaves the site the day after its showUntil day.
 # Google Analytics and Search Console switch on from the repository's variables (Settings › Secrets and variables ›
 # Actions › Variables): GA_ID (G-XXXXXXX) and GOOGLE_SITE_VERIFICATION - both optional.
 name: Deploy
@@ -6,6 +7,8 @@ name: Deploy
 on:
   push:
     branches: [main]
+  schedule:
+    - cron: '35 18 * * *' # 00:05 in India
   workflow_dispatch:
 
 permissions:
