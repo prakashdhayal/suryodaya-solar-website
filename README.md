@@ -16,67 +16,54 @@ npm run preview    # serve dist/ to check the build
 npm run check      # type-check every page
 ```
 
-## Adding an installation (a customer at a time)
+## The customers (Installations)
 
-This is the regular job. Each customer is one folder: `src/installations/<customer>-<place>/` with `details.yaml` and
-their photos (videos in `public/installations/<same name>/`). The client sends, on WhatsApp, the photos and videos and
-this message, filled in:
+Every customer the company has installed for is one entry in `src/installations/customers.yaml`, numbered as on the
+client's "List of Solar Customers" (77 on 24 Nov 2026), with one photo: `src/installations/photos/<number as 3
+digits>.jpg`, and a thumbnail of its top (the panels) in `photos/thumbs/`. A customer without a photo is listed all
+the same ("Photo to come"); the build lists who still has none (36, 47, 57, 61, 73, 74 and 75 today - 36's photo
+was 28's again).
 
-```
-Customer: Ramesh Kumar
-Village/City: Kishangarh
-District: Ajmer                  (optional)
-Capacity: 3 kW
-Type: On-grid / Off-grid / Hybrid
-Panels: Waaree (DCR)             (DCR or non-DCR, optional)
-Inverter: Polycab                (optional)
-Installed: November 2026
-Feedback: the customer's own words, in their language (optional)
-```
+The client's photos come from the **GPS Map Camera** app, which writes the house's address, its latitude and
+longitude and a map **into the picture**. Those are blurred before a photo goes on the site - never put one up as it
+came.
 
-Put the files in a folder, paste the message into `details.txt` in it, then:
+To add a customer (the client sends name, village, kW, panel brand and a photo):
 
 ```bash
 git checkout main && git pull
-git checkout -b feature/installation-ramesh-kumar
-npm run add-installation -- "D:\From client\Ramesh Kumar"
-# more photos later for the same customer:
-#   npm run add-installation -- "D:\From client\Ramesh more" --to ramesh-kumar-kishangarh
-npm run dev                       # look at /projects/, the customer's page and the home page
-git add src/installations public/installations
-git commit -m "Installation: Ramesh Kumar, Kishangarh"
-git push -u origin feature/installation-ramesh-kumar
+git checkout -b feature/customer-ramesh-kumar
+npm run add-customer -- --name "Ramesh Kumar" --place Kishangarh --kw 3.5 --panels Tata --photo "D:\From client\ramesh.jpg"
+#   optional: --district Ajmer (shown "Lohagal, Ajmer")   --installed 2026-12 (the month; the date on the photo's stamp)
+# a photo for a customer already listed (no. 47):
+#   npm run add-customer -- --photo-for 47 --photo "D:\From client\47.jpg"
+npm run dev                       # look at /projects/ and the photo, opened large
+git add src/installations
+git commit -m "Customer: Ramesh Kumar, Kishangarh"
+git push -u origin feature/customer-ramesh-kumar
 # open the PR on GitHub and merge it - the merge publishes the site
 ```
 
-What `add-installation` does:
+What `add-customer` does:
 
-- Reads the message (any order, extra lines like "Show name: yes" ignored; "3kw", "on grid", "Nov 2026", "11/2026" all
-  understood) and writes `details.yaml` - check it before committing; correct it by hand if anything is off. An existing
-  customer's `details.yaml` is never overwritten.
-- **Photos** (JPG, PNG, WebP) are turned upright, resized to 2000 px at most, saved as JPEG and **stripped of their
-  metadata** - phone photos carry the GPS position of the customer's house. The build makes the small and large copies.
-- **Videos** (MP4) are copied as they are. Over 25 MB is warned about, over 90 MB refused (GitHub's limit is 100 MB a
-  file). Short clips work best; WhatsApp-forwarded videos are already MP4 and small. Long ones belong on YouTube.
-- iPhone HEIC photos and MOV videos are refused with a message - ask the client to share them through WhatsApp.
-- A file's name becomes its caption unless it is a camera name (`IMG_1234.jpg`, `WhatsApp Image ...`). The first photo
-  by name is the cover; `cover: <file name>` in `details.yaml` picks another.
-- Files already added are skipped, so running it twice is harmless.
+- Gives the customer the next number and writes their entry (names in capitals become "Ramesh Kumar"; "tata" becomes
+  "Tata Power Solar"). Correct `customers.yaml` by hand if anything is off - it is plain text.
+- **The photo**: turned upright, at most 2000 px, saved as JPEG without its metadata, and every GPS stamp in it
+  **blurred** (it says how many it found). **Open the photo and look**: no address or Lat/Long may be readable. Rarely
+  it blurs a strip of panels by mistake - run it again with `--skip 0` (or the box's number it printed) to leave that
+  one. iPhone HEIC photos are refused - ask for them through WhatsApp.
+- Customer details are never changed by a photo, and a customer is never removed by the script: delete their entry
+  (and photo) by hand.
 
-Everything else follows on its own:
+What follows on its own:
 
-- **Installations** (`/projects/`): the table - customer, village / city, panels, capacity, type, photos - with type,
-  place and search filters, and the totals at the top; a card per row on phones.
-- **The customer's page** (`/projects/<folder>/`): the details, their feedback, every photo and video (opening full
-  screen), more installations.
-- **Home page**: the latest three installations, and "What our customers say" (the latest three with feedback; the
-  section stays away until there is one).
+- **Installations** (`/projects/`): the totals, then the table - number, customer, village / city, capacity, panels,
+  month installed and the photo - 20 to a page, newest first, with panel brand, place and search filters. The photo
+  opens large (arrows / swipe go through that page's photos). On phones each row is a card.
+- **Home page**: the totals and the latest three customers with a photo.
 - **A page per village or city** (`/solar-installation/<place>/`, "Solar Installation in Kishangarh") once it has
-  **3 or more** installations - Ajmer aside, which is the home page's. Fewer would be thin pages Google ranks poorly.
-
-Until the first real customer is added, the three **sample installations** (`src/installations/sample-*`, marked
-"Sample" everywhere, kept out of the sitemap and search results) stand in - they disappear by themselves after that;
-delete their folders whenever convenient. To remove a customer, delete their folder(s) and push.
+  **3 or more** customers - Ajmer itself aside, which is the home page's. Today: Lohagal, Karkeri, Kishangarh,
+  Parbatsar, Rodawas, Kabir Nagar and Tityari.
 
 ## Notices (news on the home page)
 
@@ -118,10 +105,10 @@ when the scheme changes**, and move `updated:`.
 | Name, address, phone / WhatsApp, email, hours, map pin, domain | `src/data/site.ts` - `TBD` = still to come |
 | The five solutions (cards, pages, questions) | `src/data/solutions.ts` |
 | Panel and inverter brands, DCR / phase words | `src/data/brands.ts` |
-| Installations (a folder each) | `src/installations/`, read by `src/lib/installations.ts`; `components/InstallationCard.astro`, `Testimonials.astro`, `GalleryGrid.astro`, `Lightbox.astro` |
+| Customers and their photos | `src/installations/customers.yaml` and `photos/`, read by `src/lib/installations.ts`; `components/CustomerTable.astro` (the table and its pages), `InstallationCard.astro`, `Lightbox.astro`; the stamp blurring is `scripts/lib/gps-stamp.mjs` |
 | Notices and guides | `src/notices/`, `src/guides/` (`src/content.config.ts` lists their fields); `src/lib/notices.ts`, `components/NoticeStrip.astro`, `NewsCards.astro` |
 | Enquiry form (sends to WhatsApp) | `components/EnquiryForm.astro` |
-| Pages | `src/pages/` (home, solar-solutions + one per solution, products, projects + one per installation, solar-installation/<place>, news + one per notice, guides, about, contact, privacy-policy, 404) |
+| Pages | `src/pages/` (home, solar-solutions + one per solution, products, projects, solar-installation/<place>, news + one per notice, guides, about, contact, privacy-policy, 404) |
 | Look | `src/styles/global.css` (green and white tokens at the top; Poppins + Inter served from the site) |
 | Site photos (hero, sections) | `src/assets/site/` - free Unsplash photos, replace with the client's when they have good ones |
 | Logo | `src/assets/brand/`: the client's original (on black) and the transparent cut-out made from it; `components/Logo.astro` (a dark tile on light backgrounds); icons and `og-card.jpg` in `public/` |
@@ -131,7 +118,7 @@ when the scheme changes**, and move `updated:`.
 Anything the client has not given us shows on the page as **[... - to be provided]** and is left out of the structured
 data. `npm run check:placeholders` (also run by every build) lists them. Still open:
 
-- real installations - the sample installations are shown until the first customer is added
+- a photo of 7 customers (listed by the build; see *The customers*)
 
 Nothing in the text is open (21 Nov 2026): email from the client; PIN, map pin and office hours from the company's
 Google listing; the About lines written for them; the privacy policy dated the day it went live. Customers' phone
@@ -150,8 +137,9 @@ floating button on bigger screens).
   of experience or "authorised dealer" claims until the client confirms them in writing.
 - No prices or costs at all - the client's decision (22 Nov 2026).
 - Brands are shown as names, not logos (logos need the maker's permission).
-- Samples are always labelled as samples; no invented projects or reviews. Feedback is the customer's own words,
-  exactly as given, in their language - never written or polished by us.
+- No invented projects or reviews: the customers are the client's own list. There are no testimonials on the site
+  (the client's decision, 24 Nov 2026); if they come back, only in the customer's own words, with their permission.
+- Customers' photos only with the GPS stamp blurred; no customer phone numbers.
 
 ## Links inside the site
 

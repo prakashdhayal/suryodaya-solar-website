@@ -1,32 +1,43 @@
 ---
-/** One installation as a card: its cover photo, who and where, the size and type, and how many photos it has. */
-import { Image } from 'astro:assets';
+/** One installation as a card: its photo (opening large in the page's Lightbox.astro), who and where, size and panels. */
+import { Image, getImage } from 'astro:assets';
 import Icon from './Icon.astro';
-import { kw, type Installation } from '../lib/installations';
+import { kw, photoAlt, photoCaption, type Installation } from '../lib/installations';
 
 interface Props {
   item: Installation;
 }
 
 const { item: i } = Astro.props;
-const media = [i.photoCount && `${i.photoCount} photo${i.photoCount > 1 ? 's' : ''}`, i.videoCount && `${i.videoCount} video${i.videoCount > 1 ? 's' : ''}`]
-  .filter(Boolean)
-  .join(' · ');
+const full = i.photo && (await getImage({ src: i.photo, width: Math.min(1600, i.photo.width), format: 'webp', quality: 78 })).src;
 ---
 
 <article class="inst-card reveal">
   <div class="inst-media">
-    {i.cover ? <Image src={i.cover} alt="" widths={[400, 700]} sizes="(min-width: 1000px) 380px, (min-width: 640px) 46vw, 92vw" format="webp" quality={70} loading="lazy" /> : <Icon name="sun" size={40} />}
-    {i.sample && <span class="badge">Sample</span>}
+    {
+      i.photo ? (
+        <button
+          type="button"
+          class="inst-photo"
+          data-gallery-item
+          data-kind="photo"
+          data-full={full}
+          data-alt={photoAlt(i)}
+          data-caption={photoCaption(i)}
+          aria-label={`View the photo: ${photoAlt(i)}`}>
+          <Image src={i.thumb ?? i.photo} alt="" widths={[320, 480]} sizes="(min-width: 1000px) 380px, (min-width: 640px) 46vw, 92vw" format="webp" quality={70} loading="lazy" />
+        </button>
+      ) : (
+        <Icon name="sun" size={40} />
+      )
+    }
   </div>
   <div class="inst-body">
-    <h3><a class="stretch" href={i.href}>{i.customer}</a></h3>
-    <p class="inst-place"><Icon name="pin" size={16} />{i.place} · {i.month}</p>
+    <h3>{i.customer}</h3>
+    <p class="inst-place"><Icon name="pin" size={16} />{i.where}{i.month && ` · ${i.month}`}</p>
     <ul class="inst-facts" role="list">
       <li>{kw(i.capacityKw)}</li>
-      <li>{i.type}</li>
-      <li>{i.panels}{i.panelKind && ` (${i.panelKind})`}</li>
+      <li>{i.panels}</li>
     </ul>
-    {media && <span class="inst-more">{media}<Icon name="arrow" size={16} /></span>}
   </div>
 </article>

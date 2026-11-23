@@ -1,0 +1,233 @@
+---
+/**
+ * The customers as a table, 20 to a page: number, customer, village or city, capacity, panels, month installed and a
+ * small photo that opens large (the page's Lightbox.astro). Every row is in the page - search engines read them all -
+ * and the script shows one page at a time, after the panel brand, place and search have narrowed them down. The page
+ * is in the address (?page=2), so Back works. Without the script every row shows. Below 760px each row is a card.
+ */
+import { Image, getImage } from 'astro:assets';
+import { link } from '../data/site';
+import { kw, photoAlt, photoCaption, placePages, placeSlug, type Installation } from '../lib/installations';
+
+interface Props {
+  items: Installation[];
+  /** What the table is of, for screen readers. */
+  caption: string;
+}
+
+const PER_PAGE = 20;
+const { items, caption } = Astro.props;
+const brands = [...new Set(items.map((i) => i.panels))].sort();
+const places = [...new Map(items.map((i) => [placeSlug(i.where), i.where])).entries()].sort((a, b) => a[1].localeCompare(b[1]));
+const placeHref = new Map((await placePages()).map((p) => [p.slug, link(`/solar-installation/${p.slug}/`)]));
+const pages = Math.ceil(items.length / PER_PAGE);
+const rows = await Promise.all(
+  items.map(async (i) => ({
+    i,
+    full: i.photo && (await getImage({ src: i.photo, width: Math.min(1600, i.photo.width), format: 'webp', quality: 78 })).src,
+  })),
+);
+const noun = (n: number) => `installation${n === 1 ? '' : 's'}`;
+---
+
+<div class="customers" data-customers data-per-page={PER_PAGE}>
+  <div class="list-tools">
+    {
+      brands.length > 1 && (
+        <div class="filters" role="group" aria-label="Solar panel brand">
+          <button type="button" data-brand="" aria-pressed="true">All</button>
+          {brands.map((b) => <button type="button" data-brand={b} aria-pressed="false">{b}</button>)}
+        </div>
+      )
+    }
+    <div class="list-search">
+      {
+        places.length > 1 && (
+          <label>
+            <span class="sr-only">Village or city</span>
+            <select data-place>
+              <option value="">All villages and cities</option>
+              {places.map(([slug, name]) => <option value={slug}>{name}</option>)}
+            </select>
+          </label>
+        )
+      }
+      <label>
+        <span class="sr-only">Search</span>
+        <input type="search" data-search placeholder="Search a name or place" autocomplete="off" />
+      </label>
+    </div>
+  </div>
+  <p class="list-count" aria-live="polite" data-count>
+    {items.length > PER_PAGE ? `Showing 1–${PER_PAGE} of ${items.length} ${noun(items.length)}` : `${items.length} ${noun(items.length)}`}
+  </p>
+
+  <div class="inst-table-wrap">
+    <table class="inst-table">
+      <caption class="sr-only">{caption}</caption>
+      <thead>
+        <tr>
+          <th scope="col" class="cell-no">#</th>
+          <th scope="col">Customer</th>
+          <th scope="col">Village / City</th>
+          <th scope="col">Capacity</th>
+          <th scope="col">Solar panels</th>
+          <th scope="col">Installed</th>
+          <th scope="col" class="cell-photo">Photo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          rows.map(({ i, full }, n) => (
+            <tr
+              hidden={n >= PER_PAGE}
+              data-brand={i.panels}
+              data-place={placeSlug(i.where)}
+              data-text={[i.customer, i.where, i.panels].join(' ').toLowerCase()}>
+              <td class="cell-no">{i.id}</td>
+              <th scope="row">{i.customer}</th>
+              <td data-label="Village / City">
+                {placeHref.has(placeSlug(i.place)) ? <a href={placeHref.get(placeSlug(i.place))}>{i.where}</a> : i.where}
+              </td>
+              <td data-label="Capacity" class="num">{kw(i.capacityKw)}</td>
+              <td data-label="Solar panels">{i.panels}</td>
+              <td data-label="Installed" class="nowrap">{i.month ?? '–'}</td>
+              <td class="cell-photo">
+                {i.photo ? (
+                  <button
+                    type="button"
+                    class="thumb"
+                    data-gallery-item
+                    data-kind="photo"
+                    data-full={full}
+                    data-alt={photoAlt(i)}
+                    data-caption={photoCaption(i)}
+                    aria-label={`View the photo: ${photoAlt(i)}`}>
+                    <Image src={i.thumb ?? i.photo} alt="" widths={[120, 240]} sizes="120px" format="webp" quality={70} loading="lazy" />
+                  </button>
+                ) : (
+                  <span class="thumb-none">Photo to come</span>
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+    <p class="list-empty" data-empty hidden>No installation matches. <button type="button" class="link-btn" data-clear>Show all</button></p>
+  </div>
+
+  <nav class="pager" aria-label="Pages of installations" data-pager hidden={pages < 2}>
+    <button type="button" class="pager-step" data-step="-1" disabled>‹<span class="pager-word"> Previous</span></button>
+    <span class="pager-pages" data-pages>
+      {Array.from({ length: pages }, (_, p) => <button type="button" data-page={p + 1} aria-current={p === 0 ? 'page' : undefined}>{p + 1}</button>)}
+    </span>
+    <button type="button" class="pager-step" data-step="1"><span class="pager-word">Next </span>›</button>
+  </nav>
+  <noscript><style is:inline>.inst-table tbody tr[hidden] { display: table-row !important; } @media (max-width: 759px) { .inst-table tbody tr[hidden] { display: grid !important; } } .pager { display: none !important; }</style></noscript>
+</div>
+
+<script>
+  // the brand, the place and the search narrow the rows down; then one page of them shows
+  const root = document.querySelector<HTMLElement>('[data-customers]');
+  if (root) {
+    const perPage = Number(root.dataset.perPage);
+    const rows = [...root.querySelectorAll<HTMLTableRowElement>('.inst-table tbody tr')];
+    const brandButtons = root.querySelectorAll<HTMLButtonElement>('button[data-brand]');
+    const place = root.querySelector<HTMLSelectElement>('select[data-place]');
+    const search = root.querySelector<HTMLInputElement>('[data-search]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const pager = root.querySelector<HTMLElement>('[data-pager]')!;
+    const pageList = root.querySelector<HTMLElement>('[data-pages]')!;
+    const [prev, next] = root.querySelectorAll<HTMLButtonElement>('.pager-step');
+    let brand = '';
+    let page = Number(new URLSearchParams(location.search).get('page')) || 1;
+
+    const noun = (n: number) => `installation${n === 1 ? '' : 's'}`;
+    const matching = () => {
+      const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
+      return rows.filter(
+        (row) =>
+          (!brand || row.dataset.brand === brand) &&
+          (!place?.value || row.dataset.place === place.value) &&
+          words.every((w) => row.dataset.text!.includes(w)),
+      );
+    };
+
+    function render() {
+      const shown = matching();
+      const pages = Math.max(1, Math.ceil(shown.length / perPage));
+      page = Math.min(Math.max(1, page), pages);
+      const from = (page - 1) * perPage;
+      const onPage = new Set(shown.slice(from, from + perPage));
+      for (const row of rows) row.hidden = !onPage.has(row);
+
+      const of = shown.length === rows.length ? `${rows.length} ${noun(rows.length)}` : `${shown.length} of ${rows.length} ${noun(rows.length)}`;
+      count.textContent = shown.length > perPage ? `Showing ${from + 1}–${from + onPage.size} of ${of}` : of;
+      empty.hidden = shown.length > 0;
+
+      pager.hidden = pages < 2;
+      pageList.replaceChildren(
+        ...Array.from({ length: pages }, (_, p) => {
+          const b = document.createElement('button');
+          b.type = 'button';
+          b.dataset.page = String(p + 1);
+          b.textContent = String(p + 1);
+          if (p + 1 === page) b.setAttribute('aria-current', 'page');
+          return b;
+        }),
+      );
+      prev.disabled = page === 1;
+      next.disabled = page === pages;
+    }
+
+    /** The page into the address; Back returns to the one before. */
+    function goTo(p: number) {
+      page = p;
+      render();
+      const url = new URL(location.href);
+      if (page > 1) url.searchParams.set('page', String(page));
+      else url.searchParams.delete('page');
+      history.pushState({ page }, '', url);
+      const top = root!.getBoundingClientRect().top;
+      if (top < 0) root!.scrollIntoView({ block: 'start' });
+    }
+
+    /** A new filter starts again at page 1. */
+    function filtered() {
+      page = 1;
+      const url = new URL(location.href);
+      url.searchParams.delete('page');
+      history.replaceState(null, '', url);
+      render();
+    }
+
+    pager.addEventListener('click', (e) => {
+      const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+      if (!button || button.disabled) return;
+      goTo(button.dataset.page ? Number(button.dataset.page) : page + Number(button.dataset.step));
+    });
+    addEventListener('popstate', () => {
+      page = Number(new URLSearchParams(location.search).get('page')) || 1;
+      render();
+    });
+    brandButtons.forEach((button) =>
+      button.addEventListener('click', () => {
+        brand = button.dataset.brand!;
+        brandButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+        filtered();
+      }),
+    );
+    place?.addEventListener('change', filtered);
+    search.addEventListener('input', filtered);
+    root.querySelector('[data-clear]')!.addEventListener('click', () => {
+      brand = '';
+      brandButtons.forEach((b) => b.setAttribute('aria-pressed', String(!b.dataset.brand)));
+      if (place) place.value = '';
+      search.value = '';
+      filtered();
+    });
+    render();
+  }
+</script>

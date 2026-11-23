@@ -5,16 +5,16 @@ import ContactSection from '../components/ContactSection.astro';
 import CtaBand from '../components/CtaBand.astro';
 import Icon from '../components/Icon.astro';
 import InstallationCard from '../components/InstallationCard.astro';
+import Lightbox from '../components/Lightbox.astro';
 import NewsCards from '../components/NewsCards.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ServiceCards from '../components/ServiceCards.astro';
-import Testimonials from '../components/Testimonials.astro';
 import ActionButtons from '../components/ActionButtons.astro';
 import Base from '../layouts/Base.astro';
 import { INVERTER_BRANDS, PANEL_BRANDS } from '../data/brands';
 import { link } from '../data/site';
-import { installations } from '../lib/installations';
+import { installations, kw, totals } from '../lib/installations';
 import { currentNotices } from '../lib/notices';
 import commercialRoof from '../assets/site/commercial-rooftop-solar.jpg';
 import hero from '../assets/site/hero-solar-panels-blue-sky.jpg';
@@ -22,9 +22,8 @@ import rooftop from '../assets/site/rooftop-panel-installation.jpg';
 import technician from '../assets/site/technician-wiring-solar-panel.jpg';
 
 const all = await installations();
-const recent = all.slice(0, 3);
-const samples = all.some((i) => i.sample);
-const said = all.filter((i) => i.feedback).slice(0, 3);
+const recent = all.filter((i) => i.photo).slice(0, 3);
+const sum = totals(all);
 const news = (await currentNotices()).slice(0, 3);
 ---
 
@@ -170,34 +169,17 @@ const news = (await currentNotices()).slice(0, 3);
         id="work-title"
         eyebrow="Projects"
         heading="Our installations"
-        lead="Systems we have installed for homes and businesses - each with its own photos."
+        lead={`${sum.count} systems, ${kw(sum.kw)} in all, in Ajmer and the villages and towns around it.`}
         center
       />
-      {
-        samples && (
-          <div class="notice reveal">
-            <Icon name="sun" size={20} />
-            <p>These are samples, to show how our installations will appear. Our customers' installations will be added here.</p>
-          </div>
-        )
-      }
       <div class="inst-grid">
         {recent.map((i) => <InstallationCard item={i} />)}
       </div>
-      <div class="section-foot"><a class="btn btn-primary" href={link('/projects/')}>See all installations <Icon name="arrow" size={18} /></a></div>
+      <div class="section-foot"><a class="btn btn-primary" href={link('/projects/')}>See all {sum.count} installations <Icon name="arrow" size={18} /></a></div>
     </div>
   </section>
 
-  {
-    said.length > 0 && (
-      <section class="section" aria-labelledby="said-title">
-        <div class="wrap">
-          <SectionHead id="said-title" eyebrow="Customer feedback" heading="What our customers say" lead="In their own words." center />
-          <Testimonials items={said} />
-        </div>
-      </section>
-    )
-  }
+  <Lightbox />
 
   <CtaBand quoteHref="#enquiry" />
 
