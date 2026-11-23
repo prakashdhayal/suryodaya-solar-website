@@ -10,7 +10,7 @@
     "dev": "astro dev",
     "build": "node scripts/check-placeholders.mjs && astro build",
     "preview": "astro preview",
-    "add-media": "node scripts/add-media.mjs",
+    "add-installation": "node scripts/add-installation.mjs",
     "check:placeholders": "node scripts/check-placeholders.mjs",
     "astro": "astro",
     "check": "astro check"

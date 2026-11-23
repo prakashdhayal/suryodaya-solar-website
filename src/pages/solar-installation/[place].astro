@@ -1,0 +1,71 @@
+---
+/**
+ * A village or city's own page - only once it has PLACE_PAGE_MIN real installations (src/lib/installations.ts), so
+ * every such page shows real work there, never a page with nothing on it.
+ */
+import ContactSection from '../../components/ContactSection.astro';
+import Icon from '../../components/Icon.astro';
+import InstallationCard from '../../components/InstallationCard.astro';
+import Testimonials from '../../components/Testimonials.astro';
+import Base from '../../layouts/Base.astro';
+import { link } from '../../data/site';
+import { kw, placePages, totals, type Installation } from '../../lib/installations';
+
+export async function getStaticPaths() {
+  return (await placePages()).map((p) => ({ params: { place: p.slug }, props: p }));
+}
+
+const { slug, place, items } = Astro.props as { slug: string; place: string; items: Installation[] };
+const sum = totals(items);
+const types = [...new Set(items.map((i) => i.type.toLowerCase()))];
+---
+
+<Base
+  title={`Solar Installation in ${place}`}
+  fullTitle={`Solar Installation in ${place} | Suryodaya Solar Power`}
+  description={`${sum.count} solar systems installed by Suryodaya Solar Power in ${place} (${kw(sum.kw)} in all) - ${types.join(', ')} - with photos of each. Enquire for your home or business.`}
+  crumbs={[
+    { name: 'Installations', href: '/projects/' },
+    { name: place, href: `/solar-installation/${slug}/` },
+  ]}
+  quoteHref="#enquiry"
+>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Installations in {place}</span>
+      <h1>Solar Installation in {place}</h1>
+      <p class="lead">
+        Suryodaya Solar Power, from Ajmer, has installed these solar systems in {place}. Each one has its own page with
+        photos.
+      </p>
+      <ul class="stats" role="list">
+        <li><strong>{sum.count}</strong><span>installations</span></li>
+        <li><strong>{kw(sum.kw)}</strong><span>installed</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap">
+      <div class="inst-grid">
+        {items.map((i) => <InstallationCard item={i} />)}
+      </div>
+      <div class="section-foot">
+        <a class="btn btn-ghost" href={link('/projects/')}>All installations <Icon name="arrow" size={18} /></a>
+      </div>
+    </div>
+  </section>
+
+  {
+    items.some((i) => i.feedback) && (
+      <section class="section alt tight" aria-labelledby="said-title">
+        <div class="wrap">
+          <h2 id="said-title">What customers in {place} said</h2>
+          <Testimonials items={items} />
+        </div>
+      </section>
+    )
+  }
+
+  <ContactSection heading={`Solar for your place in ${place}`} />
+</Base>

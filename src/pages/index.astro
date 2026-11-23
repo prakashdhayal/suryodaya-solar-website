@@ -3,24 +3,29 @@ import { Picture } from 'astro:assets';
 import BrandGrid from '../components/BrandGrid.astro';
 import ContactSection from '../components/ContactSection.astro';
 import CtaBand from '../components/CtaBand.astro';
-import GalleryGrid from '../components/GalleryGrid.astro';
 import Icon from '../components/Icon.astro';
-import Lightbox from '../components/Lightbox.astro';
+import InstallationCard from '../components/InstallationCard.astro';
+import NewsCards from '../components/NewsCards.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ServiceCards from '../components/ServiceCards.astro';
+import Testimonials from '../components/Testimonials.astro';
 import ActionButtons from '../components/ActionButtons.astro';
 import Base from '../layouts/Base.astro';
 import { INVERTER_BRANDS, PANEL_BRANDS } from '../data/brands';
 import { link } from '../data/site';
-import { galleryItems } from '../lib/gallery';
+import { installations } from '../lib/installations';
+import { currentNotices } from '../lib/notices';
 import commercialRoof from '../assets/site/commercial-rooftop-solar.jpg';
 import hero from '../assets/site/hero-solar-panels-blue-sky.jpg';
 import rooftop from '../assets/site/rooftop-panel-installation.jpg';
 import technician from '../assets/site/technician-wiring-solar-panel.jpg';
 
-const recent = galleryItems().slice(0, 6);
-const samples = recent.some((i) => i.sample);
+const all = await installations();
+const recent = all.slice(0, 3);
+const samples = all.some((i) => i.sample);
+const said = all.filter((i) => i.feedback).slice(0, 3);
+const news = (await currentNotices()).slice(0, 3);
 ---
 
 <Base
@@ -44,7 +49,7 @@ const samples = recent.some((i) => i.sample);
     <div class="wrap hero-inner">
       <span class="eyebrow">Suryodaya Solar Power · Ajmer</span>
       <h1 id="hero-title">Solar Panel Installation in <span class="accent">Ajmer</span></h1>
-      <p class="lead">On-grid, off-grid and hybrid solar systems for homes and businesses - with DCR and non-DCR panels and single- and three-phase inverters from leading brands.</p>
+      <p class="lead">A solar installation company in Ajmer: on-grid, off-grid and hybrid systems for homes and businesses, with DCR and non-DCR panels and single- and three-phase inverters from leading brands.</p>
       <ActionButtons onDark quoteHref="#enquiry" />
       <ul class="hero-facts">
         <li><Icon name="check" size={20} />On-grid · Off-grid · Hybrid</li>
@@ -53,6 +58,20 @@ const samples = recent.some((i) => i.sample);
       </ul>
     </div>
   </section>
+
+  {
+    news.length > 0 && (
+      <section class="section tight news-band" aria-labelledby="news-title">
+        <div class="wrap">
+          <div class="row-head">
+            <h2 id="news-title">Latest news</h2>
+            <a class="text-link" href={link('/news/')}>All news & guides <Icon name="arrow" size={18} /></a>
+          </div>
+          <NewsCards notices={news} />
+        </div>
+      </section>
+    )
+  }
 
   <section class="section" aria-labelledby="intro-title">
     <div class="wrap split">
@@ -149,26 +168,38 @@ const samples = recent.some((i) => i.sample);
     <div class="wrap">
       <SectionHead
         id="work-title"
-        eyebrow="Projects & gallery"
+        eyebrow="Projects"
         heading="Our installations"
-        lead="Photos and videos from our solar installation work."
+        lead="Systems we have installed for homes and businesses - each with its own photos."
         center
       />
       {
         samples && (
           <div class="notice reveal">
             <Icon name="sun" size={20} />
-            <p>These are sample images. Photos and videos of our own installations will appear here as they are added.</p>
+            <p>These are samples, to show how our installations will appear. Our customers' installations will be added here.</p>
           </div>
         )
       }
-      <GalleryGrid items={recent} />
-      <div class="section-foot"><a class="btn btn-primary" href={link('/projects/')}>View the full gallery <Icon name="arrow" size={18} /></a></div>
+      <div class="inst-grid">
+        {recent.map((i) => <InstallationCard item={i} />)}
+      </div>
+      <div class="section-foot"><a class="btn btn-primary" href={link('/projects/')}>See all installations <Icon name="arrow" size={18} /></a></div>
     </div>
   </section>
+
+  {
+    said.length > 0 && (
+      <section class="section" aria-labelledby="said-title">
+        <div class="wrap">
+          <SectionHead id="said-title" eyebrow="Customer feedback" heading="What our customers say" lead="In their own words." center />
+          <Testimonials items={said} />
+        </div>
+      </section>
+    )
+  }
 
   <CtaBand quoteHref="#enquiry" />
 
   <ContactSection />
-  <Lightbox />
 </Base>

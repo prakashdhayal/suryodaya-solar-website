@@ -8,5 +8,7 @@ export default defineConfig({
   site: new URL(SITE_URL).origin,
   base: BASE_PATH || '/',
   trailingSlash: 'always',
-  integrations: [sitemap({ filter: (page) => !page.endsWith('/404/') })],
+  // the sample installations (shown only until the first real one) stay out of search engines
+  integrations: [sitemap({ filter: (page) => !page.endsWith('/404/') && !page.includes('/projects/sample-') })],
+  redirects: { '/guides/': '/news/' },
 });

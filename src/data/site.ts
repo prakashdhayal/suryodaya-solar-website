@@ -78,9 +78,10 @@ export const QUOTE_HREF = '/contact/#enquiry';
 export const NAV = [
   { href: '/', label: 'Home' },
   { href: '/solar-solutions/', label: 'Solar Solutions' },
-  { href: '/products/', label: 'Products & Brands' },
-  { href: '/projects/', label: 'Projects' },
-  { href: '/about/', label: 'About Us' },
+  { href: '/products/', label: 'Products' },
+  { href: '/projects/', label: 'Installations' },
+  { href: '/news/', label: 'News' },
+  { href: '/about/', label: 'About' },
   { href: '/contact/', label: 'Contact' },
 ] as const;
 

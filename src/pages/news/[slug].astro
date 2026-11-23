@@ -1,0 +1,86 @@
+---
+/** A notice's own page: its words in full, its source and its link. Once its day has passed it says it has ended. */
+import { getCollection, render } from 'astro:content';
+import ActionButtons from '../../components/ActionButtons.astro';
+import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro';
+import { SITE_URL } from '../../data/site';
+import { displayDay, noticeLink, notices, type Notice } from '../../lib/notices';
+
+export async function getStaticPaths() {
+  return (await notices()).map((notice) => ({ params: { slug: notice.id }, props: { notice } }));
+}
+
+const { notice: n } = Astro.props as { notice: Notice };
+const entry = (await getCollection('notices')).find((e) => e.id === n.id)!;
+const { Content } = await render(entry);
+const ownLink = noticeLink(n) !== n.href;
+const url = `${SITE_URL}/news/${n.id}/`;
+const article = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: n.title,
+  description: n.summary,
+  datePublished: n.date,
+  url,
+  mainEntityOfPage: url,
+  image: `${SITE_URL}/og-card.jpg`,
+  author: { '@id': `${SITE_URL}/#business` },
+  publisher: { '@id': `${SITE_URL}/#business` },
+};
+---
+
+<Base
+  title={n.title}
+  description={n.summary}
+  pageType="WebPage"
+  crumbs={[
+    { name: 'News & Guides', href: '/news/' },
+    { name: n.title, href: `/news/${n.id}/` },
+  ]}
+  jsonLd={[article]}
+>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">{n.type} · <time datetime={n.date}>{displayDay(n.date)}</time></span>
+      <h1>{n.title}</h1>
+      <p class="lead">{n.summary}</p>
+      {
+        n.ended ? (
+          <p class="notice"><Icon name="clock" size={20} />This notice ended on {displayDay(n.showUntil!)}.</p>
+        ) : (
+          n.showUntil && <p class="tag sun">Until {displayDay(n.showUntil)}</p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap content-grid">
+      <div class="prose">
+        <Content />
+        {
+          n.source && (
+            <p class="source">
+              Official source: <a href={n.source} target="_blank" rel="noopener">{new URL(n.source).hostname}</a>
+            </p>
+          )
+        }
+        {
+          ownLink && (
+            <p>
+              <a class="btn btn-primary" href={noticeLink(n)}>
+                {n.linkText ?? 'Read more'} <Icon name="arrow" size={18} />
+              </a>
+            </p>
+          )
+        }
+      </div>
+      <aside class="card aside-card">
+        <h2>Questions?</h2>
+        <p>Call or WhatsApp us - we'll explain what this means for your home or business.</p>
+        <ActionButtons />
+      </aside>
+    </div>
+  </section>
+</Base>

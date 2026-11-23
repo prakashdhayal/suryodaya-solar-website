@@ -1,0 +1,104 @@
+---
+/** A guide (src/guides/<slug>.md): its text, its questions, and the official pages it is written from. */
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import ActionButtons from '../../components/ActionButtons.astro';
+import ContactSection from '../../components/ContactSection.astro';
+import Faq from '../../components/Faq.astro';
+import Icon from '../../components/Icon.astro';
+import Base from '../../layouts/Base.astro';
+import { link, SITE_URL } from '../../data/site';
+import { displayDay } from '../../lib/notices';
+
+export async function getStaticPaths() {
+  return (await getCollection('guides')).map((guide) => ({ params: { slug: guide.id }, props: { guide } }));
+}
+
+const { guide } = Astro.props as { guide: CollectionEntry<'guides'> };
+const g = guide.data;
+const { Content } = await render(guide);
+const others = (await getCollection('guides')).filter((o) => o.id !== guide.id);
+const url = `${SITE_URL}/guides/${guide.id}/`;
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: g.h1,
+    description: g.description,
+    dateModified: g.updated,
+    url,
+    mainEntityOfPage: url,
+    image: `${SITE_URL}/og-card.jpg`,
+    author: { '@id': `${SITE_URL}/#business` },
+    publisher: { '@id': `${SITE_URL}/#business` },
+  },
+  ...(g.faqs.length
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: g.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+        },
+      ]
+    : []),
+];
+---
+
+<Base
+  title={g.name}
+  fullTitle={g.title}
+  description={g.description}
+  crumbs={[
+    { name: 'News & Guides', href: '/news/' },
+    { name: g.name, href: `/guides/${guide.id}/` },
+  ]}
+  jsonLd={jsonLd}
+  quoteHref="#enquiry"
+>
+  <section class="page-head">
+    <div class="wrap">
+      <span class="eyebrow">Guide · Updated <time datetime={g.updated}>{displayDay(g.updated)}</time></span>
+      <h1>{g.h1}</h1>
+      <p class="lead">{g.lead}</p>
+    </div>
+  </section>
+
+  <section class="section tight">
+    <div class="wrap content-grid">
+      <div class="prose guide">
+        <Content />
+        {
+          g.faqs.length > 0 && (
+            <section>
+              <h2>Common questions</h2>
+              <Faq faqs={g.faqs} />
+            </section>
+          )
+        }
+        <section class="sources">
+          <h2>Official sources</h2>
+          <p>Rules and amounts can change. These official pages have the final word - check them before you decide.</p>
+          <ul>
+            {g.sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}
+          </ul>
+        </section>
+      </div>
+      <aside class="card aside-card">
+        <h2>Talk to us first</h2>
+        <p>We'll look at your roof and connection and explain the steps for your house.</p>
+        <ActionButtons quoteHref="#enquiry" />
+        {
+          others.length > 0 && (
+            <div class="aside-more">
+              <h3>More guides</h3>
+              <ul role="list">
+                {others.map((o) => <li><a href={link(`/guides/${o.id}/`)}>{o.data.name} <Icon name="arrow" size={16} /></a></li>)}
+              </ul>
+            </div>
+          )
+        }
+      </aside>
+    </div>
+  </section>
+
+  <ContactSection />
+</Base>

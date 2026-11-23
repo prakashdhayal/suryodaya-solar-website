@@ -1,0 +1,11 @@
+# A SAMPLE, shown only until the first real installation is added (then hidden on its own). Delete when no longer needed.
+customer: Sample customer 1
+place: Kishangarh
+capacityKw: 3
+type: On-Grid
+panels: Waaree
+panelKind: DCR
+inverter: Polycab
+installed: '2026-11'
+feedback: Sample feedback - the customer's own words will appear here.
+sample: true

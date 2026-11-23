@@ -12,6 +12,8 @@ import '../styles/global.css';
 import EmailText from '../components/EmailText.astro';
 import Icon from '../components/Icon.astro';
 import Logo from '../components/Logo.astro';
+import NoticeStrip from '../components/NoticeStrip.astro';
+import { getCollection } from 'astro:content';
 import { SOLUTIONS } from '../data/solutions';
 import {
   ADDRESS,
@@ -118,6 +120,7 @@ const pageData = isHome
         : {}),
     };
 const year = new Date().getFullYear();
+const guides = (await getCollection('guides')).sort((a, b) => a.data.name.localeCompare(b.data.name));
 ---
 
 <!doctype html>
@@ -170,6 +173,7 @@ const year = new Date().getFullYear();
   </head>
   <body>
     <a class="skip" href="#main">Skip to the content</a>
+    <NoticeStrip />
     <header class="top">
       <div class="wrap top-inner">
         <a class="brand" href={link('/')} aria-label={`${COMPANY.name} - home`}>
@@ -232,6 +236,7 @@ const year = new Date().getFullYear();
             <h2>Company</h2>
             <ul role="list">
               {NAV.filter((n) => n.href !== '/').map((item) => <li><a href={link(item.href)}>{item.label}</a></li>)}
+              {guides.map((g) => <li><a href={link(`/guides/${g.id}/`)}>{g.data.name}</a></li>)}
             </ul>
           </nav>
           <div>
@@ -261,6 +266,12 @@ const year = new Date().getFullYear();
     </a>
 
     <script>
+      // a notice whose last day (data-until, India's date) has passed hides itself, before the nightly rebuild drops it
+      const today = new Date(Date.now() + 5.5 * 3600_000).toISOString().slice(0, 10);
+      document.querySelectorAll<HTMLElement>('[data-until]').forEach((el) => {
+        if (el.dataset.until! < today) el.hidden = true;
+      });
+
       // the phone menu (a <details>) closes on Escape, a tap outside it, or a tap on one of its links
       const menu = document.querySelector<HTMLDetailsElement>('details.menu');
       if (menu) {

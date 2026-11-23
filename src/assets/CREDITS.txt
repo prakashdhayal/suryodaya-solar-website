@@ -1,4 +1,4 @@
-Stand-in photos (site/ and samples/) are from Unsplash, free to use under the Unsplash License
+Stand-in photos (site/, and the sample installations in src/installations/sample-*/) are from Unsplash, free to use under the Unsplash License
 (https://unsplash.com/license) - no attribution required. Replace them with the client's own photos when available.
 Each is https://images.unsplash.com/<id> below.
 
@@ -9,9 +9,9 @@ site/commercial-rooftop-solar.jpg          photo-1613665813446-82a78c468a1d
 site/solar-panel-rows.jpg                  photo-1545208942-e1c9c916524b
 site/ground-mounted-solar-panels.jpg       photo-1592833159155-c62df1b65634
 site/solar-plant-at-dusk.jpg               photo-1611365892117-00ac5ef43c90
-samples/sample-01-panels-on-grass.jpg      photo-1497440001374-f26997328c1b
-samples/sample-02-panel-rows-sky.jpg       photo-1508514177221-188b1cf16e9d
-samples/sample-03-panel-array.jpg          photo-1521618755572-156ae0cdd74d
-samples/sample-04-panels-near-trees.jpg    photo-1566093097221-ac2335b09e70
-samples/sample-05-rooftop-fitting.jpg      photo-1624397640148-949b1732bb0a
-samples/sample-06-factory-roof.jpg         photo-1613665813446-82a78c468a1d
+sample-1-kishangarh/2-panels-on-a-mounting-frame.jpg     photo-1497440001374-f26997328c1b
+sample-2-ajmer/2-rows-of-panels.jpg                      photo-1508514177221-188b1cf16e9d
+sample-3-pushkar/1-the-panel-array.jpg                   photo-1521618755572-156ae0cdd74d
+sample-3-pushkar/2-panels-near-trees.jpg                 photo-1566093097221-ac2335b09e70
+sample-1-kishangarh/1-panels-being-fitted-on-a-roof.jpg  photo-1624397640148-949b1732bb0a
+sample-2-ajmer/1-panels-across-a-factory-roof.jpg        photo-1613665813446-82a78c468a1d

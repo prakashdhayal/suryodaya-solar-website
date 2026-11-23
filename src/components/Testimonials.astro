@@ -1,0 +1,44 @@
+---
+/**
+ * What customers said, in their own words and language (an installation's `feedback`), with a photo of their system.
+ * A row on wide screens; on a phone a strip that slides sideways. Nothing is shown for an installation without one.
+ */
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { kw, type Installation } from '../lib/installations';
+
+interface Props {
+  items: Installation[];
+}
+
+const items = Astro.props.items.filter((i) => i.feedback);
+---
+
+<ul class="quotes" role="list">
+  {
+    items.map((i) => (
+      <li class="quote-card reveal">
+        {i.cover && (
+          <div class="quote-media">
+            <Image src={i.cover} alt="" widths={[400, 700]} sizes="(min-width: 1000px) 380px, 80vw" format="webp" quality={68} loading="lazy" />
+            {i.sample && <span class="badge">Sample</span>}
+          </div>
+        )}
+        <figure>
+          <blockquote>
+            <p>{i.feedback}</p>
+          </blockquote>
+          <figcaption>
+            <strong>{i.customer}</strong>
+            <span>
+              {i.place} · {kw(i.capacityKw)} {i.type} · {i.month}
+            </span>
+          </figcaption>
+        </figure>
+        <a class="quote-go" href={i.href}>
+          See their installation <Icon name="arrow" size={16} />
+        </a>
+      </li>
+    ))
+  }
+</ul>
