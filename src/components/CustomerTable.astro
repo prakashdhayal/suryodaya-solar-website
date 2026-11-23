@@ -42,11 +42,22 @@ const noun = (n: number) => `installation${n === 1 ? '' : 's'}`;
     }
     <div class="list-search">
       {
+        brands.length > 1 && (
+          <label class="brand-pick">
+            <span class="sr-only">Solar panel brand</span>
+            <select data-brand-select>
+              <option value="">All brands</option>
+              {brands.map((b) => <option value={b}>{b}</option>)}
+            </select>
+          </label>
+        )
+      }
+      {
         places.length > 1 && (
           <label>
             <span class="sr-only">Village or city</span>
             <select data-place>
-              <option value="">All villages and cities</option>
+              <option value="">All places</option>
               {places.map(([slug, name]) => <option value={slug}>{name}</option>)}
             </select>
           </label>
@@ -89,9 +100,9 @@ const noun = (n: number) => `installation${n === 1 ? '' : 's'}`;
               <td data-label="Village / City">
                 {placeHref.has(placeSlug(i.place)) ? <a href={placeHref.get(placeSlug(i.place))}>{i.where}</a> : i.where}
               </td>
-              <td data-label="Capacity" class="num">{kw(i.capacityKw)}</td>
-              <td data-label="Solar panels">{i.panels}</td>
-              <td data-label="Installed" class="nowrap">{i.month ?? '–'}</td>
+              <td data-label="Capacity" class="num fact">{kw(i.capacityKw)}</td>
+              <td data-label="Solar panels" class="fact">{i.panels}</td>
+              <td data-label="Installed" class:list={['nowrap', 'fact', { unknown: !i.month }]}>{i.month ?? '–'}</td>
               <td class="cell-photo">
                 {i.photo ? (
                   <button
@@ -124,7 +135,7 @@ const noun = (n: number) => `installation${n === 1 ? '' : 's'}`;
     </span>
     <button type="button" class="pager-step" data-step="1"><span class="pager-word">Next </span>›</button>
   </nav>
-  <noscript><style is:inline>.inst-table tbody tr[hidden] { display: table-row !important; } @media (max-width: 759px) { .inst-table tbody tr[hidden] { display: grid !important; } } .pager { display: none !important; }</style></noscript>
+  <noscript><style is:inline>.inst-table tbody tr[hidden] { display: table-row !important; } @media (max-width: 759px) { .inst-table tbody tr[hidden] { display: block !important; } } .pager { display: none !important; }</style></noscript>
 </div>
 
 <script>
@@ -212,18 +223,27 @@ const noun = (n: number) => `installation${n === 1 ? '' : 's'}`;
       page = Number(new URLSearchParams(location.search).get('page')) || 1;
       render();
     });
+    // the brand is buttons on wide screens and a list on phones; both say the same
+    const brandSelect = root.querySelector<HTMLSelectElement>('select[data-brand-select]');
+    function setBrand(value: string) {
+      brand = value;
+      brandButtons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.brand === value)));
+      if (brandSelect) brandSelect.value = value;
+    }
     brandButtons.forEach((button) =>
       button.addEventListener('click', () => {
-        brand = button.dataset.brand!;
-        brandButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === button)));
+        setBrand(button.dataset.brand!);
         filtered();
       }),
     );
+    brandSelect?.addEventListener('change', () => {
+      setBrand(brandSelect.value);
+      filtered();
+    });
     place?.addEventListener('change', filtered);
     search.addEventListener('input', filtered);
     root.querySelector('[data-clear]')!.addEventListener('click', () => {
-      brand = '';
-      brandButtons.forEach((b) => b.setAttribute('aria-pressed', String(!b.dataset.brand)));
+      setBrand('');
       if (place) place.value = '';
       search.value = '';
       filtered();

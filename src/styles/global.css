@@ -1016,6 +1016,15 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
 }
 .stats strong { display: block; font-family: var(--font-head); font-size: 1.5rem; color: var(--green-900); line-height: 1.2; }
 .stats span { font-size: 0.88rem; color: var(--muted); }
+@media (max-width: 639.98px) {
+  .stats { display: grid; grid-auto-flow: column; gap: 8px; }
+  .stats li { min-width: 0; padding: 10px; }
+  .stats strong { font-size: 1.15rem; white-space: nowrap; }
+  .stats span { display: block; font-size: 0.8rem; line-height: 1.3; }
+}
+@media (max-width: 359.98px) {
+  .stats strong { font-size: 1rem; }
+}
 
 /* the table's filters */
 .list-tools { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; margin-bottom: 12px; }
@@ -1037,9 +1046,14 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
 .list-count { font-size: 0.9rem; color: var(--muted); margin-bottom: 12px; }
 .list-empty { padding: 20px; text-align: center; color: var(--muted); margin: 0; }
 .link-btn { border: 0; background: none; padding: 0; font: inherit; font-weight: 600; color: var(--green-700); text-decoration: underline; cursor: pointer; }
-@media (max-width: 639.98px) {
-  .list-search { flex-basis: 100%; }
-  .list-search label { max-width: none; }
+.brand-pick { display: none; }
+@media (max-width: 759.98px) {
+  .list-tools .filters { display: none; }
+  .brand-pick { display: block; }
+  .list-search { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; flex-basis: 100%; }
+  .list-search label { max-width: none; min-width: 0; }
+  .list-search label:last-child, .list-search:not(:has(select[data-place])) .brand-pick { grid-column: 1 / -1; }
+  .list-search select { padding-inline: 12px 8px; text-overflow: ellipsis; }
 }
 
 /* the installations table: rows on wide screens, a card per row below 760px */
@@ -1098,32 +1112,38 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
   /* each card names its own fields (data-label), so the header row goes */
   .inst-table thead { display: none; }
   .inst-table tbody tr {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
-    gap: 10px 14px;
+    display: block;
+    position: relative;
+    min-height: 88px;
+    padding: 12px 12px 12px 106px;
     background: #fff;
     border: 1px solid var(--line);
-    border-radius: var(--radius);
+    border-radius: var(--radius-sm);
     box-shadow: var(--shadow);
-    padding: 16px;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
   .inst-table tbody tr:hover { background: #fff; }
-  .inst-table tbody tr > * { display: block; padding: 0; border: 0; min-width: 0; overflow-wrap: anywhere; }
-  .inst-table tbody th { grid-column: 1 / 3; grid-row: 1; font-size: 1.08rem; line-height: 1.3; }
-  .inst-table .cell-no { display: none; }
-  .inst-table tbody .cell-photo { grid-column: 3; grid-row: 1 / span 3; width: auto; }
-  .thumb, .thumb-none { width: 96px; }
-  .inst-table td[data-label]::before {
-    content: attr(data-label);
-    display: block;
-    font-size: 0.75rem;
+  .inst-table tbody tr > * { padding: 0; border: 0; min-width: 0; overflow-wrap: anywhere; }
+  .inst-table tbody th { display: block; font-size: 1.02rem; line-height: 1.3; }
+  .inst-table td[data-label='Village / City'] { display: block; margin: 2px 0 2px; font-size: 0.9rem; color: var(--muted); }
+  /* the facts as chips, which wrap cleanly on the narrowest phones */
+  .inst-table .fact {
+    display: inline-block;
+    margin: 4px 3px 0 0;
+    padding: 1px 7px;
+    border: 1px solid var(--green-100);
+    border-radius: 999px;
+    background: var(--green-50);
+    color: var(--green-900);
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 2px;
   }
+  .inst-table .fact.nowrap { background: #fff; border-color: var(--line); color: var(--muted); font-weight: 500; }
+  .inst-table .fact.unknown { display: none; }
+  .inst-table .cell-no { display: none; }
+  .inst-table tbody .cell-photo { position: absolute; left: 12px; top: 12px; width: auto; }
+  .thumb, .thumb-none { width: 82px; }
+  .thumb-none { font-size: 0.72rem; }
   .list-empty { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); }
 }
 
