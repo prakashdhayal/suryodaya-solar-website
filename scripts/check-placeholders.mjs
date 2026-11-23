@@ -1,5 +1,5 @@
 // Lists what the client still has to give us: every TBD in src/data/site.ts, every <Tbd> marker on a page, the
-// placeholder domain, and whether the installations are still samples. Runs before each build; only warns.
+// placeholder domain, and the customers whose photo is still to come. Runs before each build; only warns.
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -28,14 +28,12 @@ for (const file of walk(path.join(root, 'src')).filter((f) => f.endsWith('.astro
   }
 }
 
-const installs = path.join(root, 'src/installations');
-const real = fs.existsSync(installs)
-  ? fs.readdirSync(installs).filter((d) => {
-      const file = path.join(installs, d, 'details.yaml');
-      return fs.existsSync(file) && !/^sample:\s*true/m.test(fs.readFileSync(file, 'utf8'));
-    })
-  : [];
-if (!real.length) missing.push('installations: no real customer yet (the sample installations are shown)');
+// customers listed without a photo yet (src/installations/photos/<id as 3 digits>.jpg)
+const list = fs.readFileSync(path.join(root, 'src/installations/customers.yaml'), 'utf8');
+const photoless = [...list.matchAll(/^- id: (\d+)/gm)]
+  .map((m) => m[1])
+  .filter((id) => !fs.existsSync(path.join(root, 'src/installations/photos', id.padStart(3, '0') + '.jpg')));
+if (photoless.length) missing.push(`installations: a photo of customer no. ${photoless.join(', ')}`);
 
 if (missing.length) {
   console.warn(`\n[placeholders] Still to be provided (${missing.length}) - shown on the site as "[... - to be provided]":`);

@@ -2,7 +2,7 @@
  * The brands the company supplies, as the client listed them. Shown as names, not logos: a maker's logo is theirs to
  * allow. Nothing here says "authorised dealer" - add that only when the client confirms it for a brand.
  */
-export const PANEL_BRANDS = ['Tata Power Solar', 'Waaree', 'Adani Solar', 'Luminous', 'Vikram Solar'] as const;
+export const PANEL_BRANDS = ['Tata Power Solar', 'Waaree', 'Adani Solar', 'Luminous', 'Vikram Solar', 'Avaada'] as const;
 
 export const INVERTER_BRANDS = ['Polycab', 'Luminous', 'Deye', 'Selec', 'SolaX', 'Solis', 'GoodWe'] as const;
 

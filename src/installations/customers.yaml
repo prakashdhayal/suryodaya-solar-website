@@ -1,0 +1,569 @@
+# The customers we have installed for, one entry each, from the client's "List of Solar Customers".
+#   id          the number on that list (never reused); the photo is photos/<id as 3 digits>.jpg, when there is one
+#   customer    as on the list
+#   place       the village or city; district when the list gives one ("Lohagal, Ajmer")
+#   capacityKw  panels  installed (YYYY-MM, from the date on the photo - left out when not known)
+# `npm run add-customer` adds to it (see README).
+
+- id: 1
+  customer: "Prem Sukh Vaishnav"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2025-11'
+
+- id: 2
+  customer: "Kamal Soni"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2025-10'
+
+- id: 3
+  customer: "Hari Ram Khachriya"
+  place: "Singara"
+  capacityKw: 5
+  panels: "Luminous"
+  installed: '2025-11'
+
+- id: 4
+  customer: "Ram Sukh Kansodiya"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-01'
+
+- id: 5
+  customer: "Balu Ram Kansodiya"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-01'
+
+- id: 6
+  customer: "Sukha Ram Makad"
+  place: "Kundri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-01'
+
+- id: 7
+  customer: "Dilip Singh"
+  place: "Hathikhera"
+  district: "Ajmer"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+
+- id: 8
+  customer: "Kanhaiyya Lal Yogi"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.2
+  panels: "Waaree"
+  installed: '2025-12'
+
+- id: 9
+  customer: "Ramniwas Karwa"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.2
+  panels: "Waaree"
+  installed: '2025-12'
+
+- id: 10
+  customer: "Dharm Raj Thori"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.2
+  panels: "Waaree"
+  installed: '2025-12'
+
+- id: 11
+  customer: "Panna Ram Bheenchar"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2025-12'
+
+- id: 12
+  customer: "Mahaveer Gurjar"
+  place: "Rodawas"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2025-12'
+
+- id: 13
+  customer: "Yashoda Gurjar"
+  place: "Rodawas"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2025-12'
+
+- id: 14
+  customer: "Shyoji Gurjar"
+  place: "Rodawas"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2025-12'
+
+- id: 15
+  customer: "Hari Narayan"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-01'
+
+- id: 16
+  customer: "Roshan Ali"
+  place: "Babaicha"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-01'
+
+- id: 17
+  customer: "Ajay Kumar Goyal"
+  place: "Chandra Vardai Nagar"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-01'
+
+- id: 18
+  customer: "Mool Dev Bhanu"
+  place: "Karkeri"
+  capacityKw: 5
+  panels: "Tata Power Solar"
+  installed: '2025-12'
+
+- id: 19
+  customer: "Jhuma Devi"
+  place: "Karkeri"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2026-01'
+
+- id: 20
+  customer: "Narayan Nuwad"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-02'
+
+- id: 21
+  customer: "Bhupendra Rinwa"
+  place: "Parbatsar"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-02'
+
+- id: 22
+  customer: "Kumbha Ram"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-03'
+
+- id: 23
+  customer: "Prakash Ram Jat"
+  place: "Parbatsar"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-02'
+
+- id: 24
+  customer: "Shyokat Ali"
+  place: "Peenglod"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-03'
+
+- id: 25
+  customer: "Mahendra Choudhary"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.2
+  panels: "Waaree"
+  installed: '2026-03'
+
+- id: 26
+  customer: "Shakti Singh"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Tata Power Solar"
+  installed: '2026-02'
+
+- id: 27
+  customer: "Ramraj Khachriya"
+  place: "Singara"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-04'
+
+- id: 28
+  customer: "Kailash Chand"
+  place: "Parbatsar"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-02'
+
+- id: 29
+  customer: "Nemi Chand Pareek"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-03'
+
+- id: 30
+  customer: "Shiv Kumar Gupta"
+  place: "Kishangarh"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-04'
+
+- id: 31
+  customer: "Omendra Singh Panwar"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Tata Power Solar"
+  installed: '2026-03'
+
+- id: 32
+  customer: "Bhawani Shankar Pareek"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-03'
+
+- id: 33
+  customer: "Rajendra Kumar Vaishnav"
+  place: "Kishangarh"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-04'
+
+- id: 34
+  customer: "Mukesh Kumari Tiwari"
+  place: "Kishangarh"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-05'
+
+- id: 35
+  customer: "Shiv Raj Nuvad"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-06'
+
+- id: 36
+  customer: "Yogesh Kumar"
+  place: "Kishangarh"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+
+- id: 37
+  customer: "Seema Sen"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2026-05'
+
+- id: 38
+  customer: "Om Prakash"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3
+  panels: "Tata Power Solar"
+  installed: '2026-06'
+
+- id: 39
+  customer: "Prabhu Lal Dudi"
+  place: "Kishangarh"
+  capacityKw: 5
+  panels: "Tata Power Solar"
+  installed: '2026-05'
+
+- id: 40
+  customer: "Pramila Kamboj"
+  place: "Kishangarh"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-07'
+
+- id: 41
+  customer: "Jitendra Singh Advocate"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 10
+  panels: "Tata Power Solar"
+  installed: '2026-05'
+
+- id: 42
+  customer: "Hajari Ram Bajiya"
+  place: "Danta Nagar"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2026-06'
+
+- id: 43
+  customer: "Dinesh Choudhary"
+  place: "Badu"
+  capacityKw: 3
+  panels: "Tata Power Solar"
+  installed: '2026-05'
+
+- id: 44
+  customer: "Kuldeep Singh Kashyap"
+  place: "Ramganj"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-05'
+
+- id: 45
+  customer: "Chhotu Ram Sain"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Tata Power Solar"
+  installed: '2026-06'
+
+- id: 46
+  customer: "Mohan Kanwar"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+  installed: '2026-06'
+
+- id: 47
+  customer: "Shiv Raj Nuvad"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Tata Power Solar"
+
+- id: 48
+  customer: "Ajhar Ali"
+  place: "Madar"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Tata Power Solar"
+  installed: '2026-09'
+
+- id: 49
+  customer: "Kishana Ram Dhundhwal"
+  place: "Kabir Nagar"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2026-10'
+
+- id: 50
+  customer: "Shri Mal Jat"
+  place: "Kabir Nagar"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Tata Power Solar"
+  installed: '2026-07'
+
+- id: 51
+  customer: "Kanta Devi"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Waaree"
+  installed: '2026-08'
+
+- id: 52
+  customer: "Parma Ram"
+  place: "Paner"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-09'
+
+- id: 53
+  customer: "Moti Ram Jandu"
+  place: "Hanuman Vatika"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-11'
+
+- id: 54
+  customer: "Jabber Singh"
+  place: "Jalampura"
+  capacityKw: 3
+  panels: "Waaree"
+  installed: '2026-09'
+
+- id: 55
+  customer: "Surendra Sharma"
+  place: "Kishangarh"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-07'
+
+- id: 56
+  customer: "Jakhad Public Sikshan Sansthan"
+  place: "Tityari"
+  capacityKw: 5
+  panels: "Waaree"
+
+- id: 57
+  customer: "Jakhad Hostel and Care Centre Society"
+  place: "Tityari"
+  capacityKw: 5
+  panels: "Waaree"
+
+- id: 58
+  customer: "Prema Ram"
+  place: "Parbatsar"
+  capacityKw: 3
+  panels: "Waaree"
+  installed: '2026-09'
+
+- id: 59
+  customer: "Amar Singh"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Waaree"
+  installed: '2026-08'
+
+- id: 60
+  customer: "Ummed Singh"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Waaree"
+  installed: '2026-08'
+
+- id: 61
+  customer: "Hari Ram"
+  place: "Tityari"
+  capacityKw: 5
+  panels: "Waaree"
+
+- id: 62
+  customer: "Raghunath Chotiya"
+  place: "Parbatsar"
+  capacityKw: 3
+  panels: "Waaree"
+  installed: '2026-09'
+
+- id: 63
+  customer: "Bhairu Singh"
+  place: "BJS Colony"
+  district: "Jodhpur"
+  capacityKw: 5
+  panels: "Avaada"
+  installed: '2026-09'
+
+- id: 64
+  customer: "Babu Lal Bishnoi"
+  place: "Ganpati Nagar"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-09'
+
+- id: 65
+  customer: "Bhagwan Singh"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-10'
+
+- id: 66
+  customer: "Foj Singh"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-10'
+
+- id: 67
+  customer: "Rajni Kumari Gehlot"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Avaada"
+  installed: '2026-11'
+
+- id: 68
+  customer: "Bajrang Lal Jat"
+  place: "Nonandpura"
+  capacityKw: 3
+  panels: "Waaree"
+  installed: '2026-09'
+
+- id: 69
+  customer: "Sunil Choudhary"
+  place: "Mangra"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-11'
+
+- id: 70
+  customer: "Rameshwar Ram Choyal"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Avaada"
+  installed: '2026-11'
+
+- id: 71
+  customer: "Shri Ram Bana"
+  place: "Lohagal"
+  district: "Ajmer"
+  capacityKw: 3
+  panels: "Waaree"
+  installed: '2026-11'
+
+- id: 72
+  customer: "Harendra Jodhawat"
+  place: "Bhadsiya"
+  capacityKw: 5
+  panels: "Waaree"
+  installed: '2026-10'
+
+- id: 73
+  customer: "Ashok Kumar Solanki"
+  place: "Kabir Nagar"
+  district: "Ajmer"
+  capacityKw: 5
+  panels: "Waaree"
+
+- id: 74
+  customer: "Ramniwas Saran"
+  place: "Sanchor"
+  capacityKw: 3.5
+  panels: "Waaree"
+
+- id: 75
+  customer: "Om Prakash Dudi"
+  place: "Karkeri"
+  capacityKw: 3.5
+  panels: "Waaree"
+
+- id: 76
+  customer: "Damodar Dadhich"
+  place: "Kishangarh"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2026-11'
+
+- id: 77
+  customer: "Balu Ram Tharol"
+  place: "Shubham Colony"
+  district: "Ajmer"
+  capacityKw: 6
+  panels: "Waaree"
+  installed: '2026-11'

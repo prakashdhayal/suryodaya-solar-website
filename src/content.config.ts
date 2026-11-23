@@ -1,13 +1,13 @@
 /**
- * The site's own records - a file each, nothing to list by hand:
- *   installations  src/installations/<slug>/details.yaml, that customer's photos beside it and videos in
- *                  public/installations/<slug>/ (`npm run add-installation` writes them; see README)
+ * The site's own records:
+ *   installations  src/installations/customers.yaml - a customer each, the photos in src/installations/photos/
+ *                  (`npm run add-customer` writes them; see README)
  *   notices        src/notices/<YYYY-MM-DD>-<slug>.md - news and announcements: the strip above the header, the home
  *                  page's "Latest news" and /news/
  *   guides         src/guides/<slug>.md - the longer how-to pages, /guides/<slug>/
  */
 import { defineCollection } from 'astro:content';
-import { glob } from 'astro/loaders';
+import { file, glob } from 'astro/loaders';
 import { z } from 'astro/zod';
 
 /** A day as YYYY-MM-DD, written plain in YAML (which reads it as a date) or quoted. */
@@ -16,25 +16,18 @@ const day = z
   .transform((d) => (typeof d === 'string' ? d : d.toISOString().slice(0, 10)));
 
 const installations = defineCollection({
-  loader: glob({ pattern: '*/details.yaml', base: './src/installations', generateId: ({ entry }) => entry.split('/')[0] }),
+  loader: file('src/installations/customers.yaml'),
   schema: z.object({
+    /** The number on the client's list; the photo is photos/<id as 3 digits>.jpg. */
+    id: z.number().int().positive(),
     customer: z.string(),
     /** The village or city. */
     place: z.string(),
     district: z.string().optional(),
     capacityKw: z.number().positive(),
-    type: z.enum(['On-Grid', 'Off-Grid', 'Hybrid']),
     panels: z.string(),
-    panelKind: z.enum(['DCR', 'non-DCR']).optional(),
-    inverter: z.string().optional(),
-    /** The month, 'YYYY-MM' (quoted). */
-    installed: z.string().regex(/^\d{4}-\d{2}$/),
-    /** The customer's own words, exactly as they gave them, in their language. */
-    feedback: z.string().optional(),
-    /** The photo shown first (a file name in the folder); otherwise the first by name. */
-    cover: z.string().optional(),
-    /** Stands in until the first real installation is added, marked "Sample" everywhere. */
-    sample: z.boolean().default(false),
+    /** The month, 'YYYY-MM' (quoted), when known. */
+    installed: z.string().regex(/^\d{4}-\d{2}$/).optional(),
   }),
 });
 
