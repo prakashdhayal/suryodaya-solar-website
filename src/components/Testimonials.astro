@@ -1,9 +1,10 @@
 ---
 /**
  * "What our customers say": a card per testimonial - the stars, their words, what they liked, who they are and the
- * system they have, with its photo (opening large in the page's Lightbox.astro). Side by side from 640px; on a phone
- * the cards slide sideways. No review markup for search engines: Google does not take a business's own reviews of
- * itself, and can count them against it.
+ * system they have, with its photo (opening large in the page's Lightbox.astro). One row that slides: about three
+ * cards in view on a computer, two on a tablet, one on a phone; the arrows move it a card at a time, and a swipe or the
+ * keyboard works too. No review markup for search engines: Google does not take a business's own reviews of itself,
+ * and can count them against it.
  */
 import { Image, getImage } from 'astro:assets';
 import Icon from './Icon.astro';
@@ -23,10 +24,11 @@ const cards = await Promise.all(
 const stars = (n: number) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
 ---
 
-<ul class="quotes" role="list">
+<div class="quote-slider reveal" data-slider>
+<ul class="quotes" role="list" id="customer-quotes" tabindex="0" aria-label="What our customers say - scroll sideways for more" data-slides>
   {
     cards.map(({ t, i, full }) => (
-      <li class="quote-card reveal">
+      <li class="quote-card">
         {i.photo ? (
           <button
             type="button"
@@ -60,3 +62,35 @@ const stars = (n: number) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.s
     ))
   }
 </ul>
+<div class="slider-nav" data-nav>
+  <button type="button" class="slider-btn prev" aria-controls="customer-quotes" aria-label="Previous customers" data-step="-1" disabled><Icon name="left" size={22} /></button>
+  <button type="button" class="slider-btn next" aria-controls="customer-quotes" aria-label="More customers" data-step="1"><Icon name="right" size={22} /></button>
+</div>
+</div>
+
+<script>
+  // the arrows move the row a card at a time; at either end that arrow rests, and with nothing to move they go
+  document.querySelectorAll<HTMLElement>('[data-slider]').forEach((slider) => {
+    const track = slider.querySelector<HTMLElement>('[data-slides]')!;
+    const nav = slider.querySelector<HTMLElement>('[data-nav]')!;
+    const [prev, next] = nav.querySelectorAll<HTMLButtonElement>('button');
+    const step = () => {
+      const card = track.querySelector<HTMLElement>(':scope > li');
+      return card ? card.getBoundingClientRect().width + parseFloat(getComputedStyle(track).columnGap || '0') : track.clientWidth;
+    };
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      nav.hidden = max <= 1;
+      prev.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= max - 1;
+    };
+    nav.addEventListener('click', (e) => {
+      const button = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+      const behavior = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+      if (button) track.scrollBy({ left: step() * Number(button.dataset.step), behavior });
+    });
+    track.addEventListener('scroll', update, { passive: true });
+    addEventListener('resize', update);
+    update();
+  });
+</script>
