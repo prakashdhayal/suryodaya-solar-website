@@ -1149,6 +1149,66 @@ ul[role='list'], ol[role='list'] { list-style: none; margin: 0; padding: 0; }
 
 .page-head .notice { margin: 4px 0 20px; max-width: 760px; }
 
+/* what customers say */
+.quotes { display: grid; gap: 20px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) {
+  .quotes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+/* under a centred heading: a short last row sits in the middle, not at the left */
+@media (min-width: 1000px) {
+  .quotes { grid-template-columns: repeat(auto-fit, calc((100% - 40px) / 3)); justify-content: center; }
+}
+/* on a phone they slide sideways, the next one peeking in */
+@media (max-width: 639.98px) {
+  .quotes:has(> li:nth-child(2)) {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 86%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    margin-inline: calc(var(--gutter) * -1);
+    padding: 4px var(--gutter) 16px;
+    scroll-padding-inline: var(--gutter);
+  }
+  .quotes > li { scroll-snap-align: start; }
+}
+.quote-card {
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+.quote-media { position: relative; display: block; width: 100%; aspect-ratio: 16 / 9; padding: 0; border: 0; background: var(--green-100); overflow: hidden; }
+button.quote-media { cursor: zoom-in; }
+.quote-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.35s ease; }
+button.quote-media:hover img { transform: scale(1.04); }
+button.quote-media:focus-visible { outline: 3px solid var(--sun-400); outline-offset: -3px; }
+.quote-media-none { display: grid; place-items: center; color: var(--green-700); }
+.quote-card figure { margin: 0; padding: 16px 20px 20px; flex: 1; display: flex; flex-direction: column; }
+.stars { margin: 0 0 8px; font-size: 1.2rem; letter-spacing: 2px; color: var(--sun-400); line-height: 1; }
+.quote-card blockquote { margin: 0 0 14px; position: relative; padding-left: 16px; border-left: 3px solid var(--sun-400); }
+.quote-card blockquote p { margin: 0; font-size: 1.02rem; line-height: 1.6; color: var(--ink); }
+.quote-points { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px !important; }
+.quote-points li {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--green-50);
+  border: 1px solid var(--green-100);
+  color: var(--green-900);
+  border-radius: 999px;
+  padding: 2px 10px 2px 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+.quote-points svg { color: var(--green-700); }
+.quote-card figcaption { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--line); }
+.quote-card figcaption strong { display: block; color: var(--green-900); font-size: 1.05rem; }
+.quote-card figcaption span { display: block; font-size: 0.9rem; color: var(--muted); }
+.quote-card .quote-system { margin-top: 2px; font-size: 0.85rem; color: var(--green-800); font-weight: 600; }
+
 /* ---------- news and guides ---------- */
 
 .guide-list { display: grid; gap: 14px; max-width: 900px; }
@@ -1202,7 +1262,7 @@ html.js .reveal.in { opacity: 1; transform: none; }
   html.js .reveal { opacity: 1; transform: none; transition: none; }
   .btn, .service-card, .audience-card, .thumb img, .inst-photo img, .brand-pill, .wa-float, .news-card, .inst-card, .guide-item { transition: none; }
   .btn:hover, .service-card:hover, .audience-card:hover, .brand-pill:hover, .news-card:hover, .guide-item:hover { transform: none; }
-  .thumb:hover img, .inst-photo:hover img { transform: none; }
+  .thumb:hover img, .inst-photo:hover img, button.quote-media:hover img { transform: none; }
 }
 
 /* products page */

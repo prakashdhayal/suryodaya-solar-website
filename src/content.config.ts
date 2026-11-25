@@ -2,6 +2,7 @@
  * The site's own records:
  *   installations  src/installations/customers.yaml - a customer each, the photos in src/installations/photos/
  *                  (`npm run add-customer` writes them; see README)
+ *   testimonials   src/installations/testimonials.yaml - what customers who agreed to be shown say (the home page)
  *   notices        src/notices/<YYYY-MM-DD>-<slug>.md - news and announcements: the strip above the header, the home
  *                  page's "Latest news" and /news/
  *   guides         src/guides/<slug>.md - the longer how-to pages, /guides/<slug>/
@@ -28,6 +29,22 @@ const installations = defineCollection({
     panels: z.string(),
     /** The month, 'YYYY-MM' (quoted), when known. */
     installed: z.string().regex(/^\d{4}-\d{2}$/).optional(),
+  }),
+});
+
+const testimonials = defineCollection({
+  loader: file('src/installations/testimonials.yaml'),
+  schema: z.object({
+    /** The customer's number in customers.yaml. */
+    id: z.number().int().positive(),
+    name: z.string(),
+    role: z.string().optional(),
+    place: z.string(),
+    rating: z.number().int().min(1).max(5),
+    points: z.array(z.string()).default([]),
+    comment: z.string(),
+    /** The day the customer agreed to be shown. */
+    agreed: day,
   }),
 });
 
@@ -68,4 +85,4 @@ const guides = defineCollection({
   }),
 });
 
-export const collections = { installations, notices, guides };
+export const collections = { installations, testimonials, notices, guides };

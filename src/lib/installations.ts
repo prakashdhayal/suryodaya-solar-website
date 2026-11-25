@@ -80,3 +80,24 @@ export const totals = (list: Installation[]) => ({
   kw: list.reduce((sum, i) => sum + i.capacityKw, 0),
   places: new Set(list.map((i) => placeSlug(i.where))).size,
 });
+
+export interface Testimonial {
+  name: string;
+  role?: string;
+  place: string;
+  rating: number;
+  points: string[];
+  comment: string;
+  /** Their installation, from the customer list. */
+  installation: Installation;
+}
+
+/** What customers say (src/installations/testimonials.yaml) by customer number, each with its installation. */
+export async function testimonials(): Promise<Testimonial[]> {
+  const byId = new Map((await installations()).map((i) => [i.id, i]));
+  return (await getCollection('testimonials')).map(({ data }) => {
+    const installation = byId.get(data.id);
+    if (!installation) throw new Error(`testimonials.yaml: no customer no. ${data.id} in customers.yaml`);
+    return { ...data, installation };
+  }).sort((a, b) => a.installation.id - b.installation.id);
+}
