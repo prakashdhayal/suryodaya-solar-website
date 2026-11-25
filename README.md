@@ -65,6 +65,24 @@ What follows on its own:
   **3 or more** customers - Ajmer itself aside, which is the home page's. Today: Lohagal, Karkeri, Kishangarh,
   Parbatsar, Rodawas, Kabir Nagar and Tityari.
 
+## What customers say (home page)
+
+`src/installations/testimonials.yaml`, one entry per customer who agreed to be shown - the home page shows them all,
+with the average rating above them:
+
+```yaml
+- id: 18                     # their number in customers.yaml (their system, month and photo come from there)
+  name: "Mool Dev Bhanu"     # as they want to be shown
+  role: "Principal"          # optional
+  place: "Karkeri"
+  rating: 5                  # 1 to 5
+  points: ["Best installation", "Timely setup"]
+  comment: "Their words."
+  agreed: 2026-11-25         # the day they agreed to be shown
+```
+
+Only a customer who agreed; see the rules below. Remove an entry when they ask.
+
 ## Notices (news on the home page)
 
 One file per notice in `src/notices/`, named `<YYYY-MM-DD>-<words>.md` (the address becomes `/news/<file name>/`):
@@ -137,8 +155,11 @@ floating button on bigger screens).
   of experience or "authorised dealer" claims until the client confirms them in writing.
 - No prices or costs at all - the client's decision (22 Nov 2026).
 - Brands are shown as names, not logos (logos need the maker's permission).
-- No invented projects or reviews: the customers are the client's own list. There are no testimonials on the site
-  (the client's decision, 24 Nov 2026); if they come back, only in the customer's own words, with their permission.
+- No invented projects: the customers are the client's own list. Testimonials (`src/installations/testimonials.yaml`,
+  the home page's "What our customers say") only for customers who agreed to be shown, with the day they agreed. The
+  first five (25 Nov 2026) told the client they agree to a 5-star rating and good words; the comments were written
+  with the client from that - plain, no figures or prices. No review markup for search engines (Google does not take
+  a business's reviews of itself).
 - Customers' photos only with the GPS stamp blurred; no customer phone numbers.
 
 ## Links inside the site

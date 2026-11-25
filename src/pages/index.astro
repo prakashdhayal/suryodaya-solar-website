@@ -10,11 +10,12 @@ import NewsCards from '../components/NewsCards.astro';
 import ProcessSteps from '../components/ProcessSteps.astro';
 import SectionHead from '../components/SectionHead.astro';
 import ServiceCards from '../components/ServiceCards.astro';
+import Testimonials from '../components/Testimonials.astro';
 import ActionButtons from '../components/ActionButtons.astro';
 import Base from '../layouts/Base.astro';
 import { INVERTER_BRANDS, PANEL_BRANDS } from '../data/brands';
 import { link } from '../data/site';
-import { installations, kw, totals } from '../lib/installations';
+import { installations, kw, testimonials, totals } from '../lib/installations';
 import { currentNotices } from '../lib/notices';
 import commercialRoof from '../assets/site/commercial-rooftop-solar.jpg';
 import hero from '../assets/site/hero-solar-panels-blue-sky.jpg';
@@ -24,6 +25,8 @@ import technician from '../assets/site/technician-wiring-solar-panel.jpg';
 const all = await installations();
 const recent = all.filter((i) => i.photo).slice(0, 3);
 const sum = totals(all);
+const said = await testimonials();
+const rating = said.length ? (said.reduce((n, t) => n + t.rating, 0) / said.length).toFixed(1) : '';
 const news = (await currentNotices()).slice(0, 3);
 ---
 
@@ -178,6 +181,23 @@ const news = (await currentNotices()).slice(0, 3);
       <div class="section-foot"><a class="btn btn-primary" href={link('/projects/')}>See all {sum.count} installations <Icon name="arrow" size={18} /></a></div>
     </div>
   </section>
+
+  {
+    said.length > 0 && (
+      <section class="section" aria-labelledby="said-title">
+        <div class="wrap">
+          <SectionHead
+            id="said-title"
+            eyebrow="Customer feedback"
+            heading="What our customers say"
+            lead={`★ ${rating} out of 5 from ${said.length} customer${said.length > 1 ? 's' : ''}`}
+            center
+          />
+          <Testimonials items={said} />
+        </div>
+      </section>
+    )
+  }
 
   <Lightbox />
 

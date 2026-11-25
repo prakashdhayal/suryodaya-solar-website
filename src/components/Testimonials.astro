@@ -1,0 +1,62 @@
+---
+/**
+ * "What our customers say": a card per testimonial - the stars, their words, what they liked, who they are and the
+ * system they have, with its photo (opening large in the page's Lightbox.astro). Side by side from 640px; on a phone
+ * the cards slide sideways. No review markup for search engines: Google does not take a business's own reviews of
+ * itself, and can count them against it.
+ */
+import { Image, getImage } from 'astro:assets';
+import Icon from './Icon.astro';
+import { kw, photoAlt, photoCaption, type Testimonial } from '../lib/installations';
+
+interface Props {
+  items: Testimonial[];
+}
+
+const { items } = Astro.props;
+const cards = await Promise.all(
+  items.map(async (t) => {
+    const i = t.installation;
+    return { t, i, full: i.photo && (await getImage({ src: i.photo, width: Math.min(1600, i.photo.width), format: 'webp', quality: 78 })).src };
+  }),
+);
+const stars = (n: number) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
+---
+
+<ul class="quotes" role="list">
+  {
+    cards.map(({ t, i, full }) => (
+      <li class="quote-card reveal">
+        {i.photo ? (
+          <button
+            type="button"
+            class="quote-media"
+            data-gallery-item
+            data-kind="photo"
+            data-full={full}
+            data-alt={photoAlt(i)}
+            data-caption={photoCaption(i)}
+            aria-label={`View the photo: ${photoAlt(i)}`}>
+            <Image src={i.thumb ?? i.photo} alt="" widths={[320, 480]} sizes="(min-width: 1000px) 380px, (min-width: 640px) 46vw, 86vw" format="webp" quality={70} loading="lazy" />
+          </button>
+        ) : (
+          <div class="quote-media quote-media-none" aria-hidden="true"><Icon name="sun" size={34} /></div>
+        )}
+        <figure>
+          <p class="stars" aria-label={`Rated ${t.rating} out of 5`}><span aria-hidden="true">{stars(t.rating)}</span></p>
+          <blockquote><p>{t.comment}</p></blockquote>
+          {t.points.length > 0 && (
+            <ul class="quote-points" role="list">
+              {t.points.map((p) => <li><Icon name="check" size={14} />{p}</li>)}
+            </ul>
+          )}
+          <figcaption>
+            <strong>{t.name}</strong>
+            <span>{[t.role, t.place].filter(Boolean).join(' · ')}</span>
+            <span class="quote-system">{kw(i.capacityKw)} · {i.panels}{i.month && ` · ${i.month}`}</span>
+          </figcaption>
+        </figure>
+      </li>
+    ))
+  }
+</ul>

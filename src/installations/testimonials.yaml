@@ -1,0 +1,54 @@
+# What customers say - the home page's "What our customers say", one entry each.
+#   id         the customer's number in customers.yaml (their system, month and photo come from there)
+#   name       as the customer wants to be shown; role and place likewise
+#   rating     1 to 5 stars
+#   points     what they liked (the chips on the card)
+#   comment    their words
+#   agreed     the day the customer agreed to be shown this way
+# Only customers who agreed. These five told the client (24-25 Nov 2026) that they agree to be shown on the website
+# with a 5-star rating and good words; the comments were written with the client from that.
+
+- id: 18
+  name: "Mool Dev Bhanu"
+  role: "Principal"
+  place: "Karkeri"
+  rating: 5
+  points: ["Best installation", "Timely setup", "Good unit generation"]
+  comment: "The installation was neat and finished on time. The system has been generating well from the very first day."
+  agreed: 2026-11-25
+
+- id: 41
+  name: "Jitendra Singh"
+  role: "Advocate"
+  place: "Ajmer"
+  rating: 5
+  points: ["Best quality", "Best service"]
+  comment: "A professional team and good quality material. They explained everything clearly, and their service after the installation has been very good."
+  agreed: 2026-11-25
+
+- id: 56
+  name: "Shyodan Ram Jakhad"
+  role: "Director, Jakhad School"
+  place: "Tityari"
+  rating: 5
+  points: ["Timely setup and working", "Best service"]
+  comment: "We put up solar for our school with Suryodaya Solar Power. The work was done on time and the system has been working well."
+  agreed: 2026-11-25
+
+- id: 49
+  name: "Kishna Ram Dhundhwal"
+  role: "Businessman"
+  place: "Ajmer"
+  rating: 5
+  points: ["Good unit generation", "Best quality"]
+  comment: "Good unit generation and good quality panels. I am happy with the installation and with the service."
+  agreed: 2026-11-25
+
+- id: 22
+  name: "Kumbha Ram Dukya"
+  role: "Police Inspector"
+  place: "Ajmer"
+  rating: 5
+  points: ["Best service", "Timely setup and working"]
+  comment: "Best service from start to finish. The setup was done in time and it has been working without any trouble."
+  agreed: 2026-11-25
